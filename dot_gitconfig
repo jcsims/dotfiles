@@ -1,0 +1,63 @@
+[hub]
+  protocol = https
+[user]
+  name = Chris Sims
+  email = chris@jcsi.ms
+[alias]
+  co = checkout
+  author-count  = shortlog -sn
+  standup = log --pretty=format:'%Cred%h%Creset - %C(yellow)%ae%Creset - %Cgreen%cd%Creset - %s%Creset' --abbrev-commit --date=local --author chris@jcsi.ms --since yesterday
+  timelog = log --pretty=format:'%Cred%h%Creset - %C(yellow)%ae%Creset - %Cgreen%cd%Creset - %s%Creset' --abbrev-commit --date=local
+  slog = log --graph --abbrev-commit --date=relative --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	recent = branch --sort=-committerdate --format=\"%(committerdate:relative)%09%(refname:short)\"
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = true
+[core]
+  excludesfile = ~/.gitignore
+[apply]
+  whitespace = nowarn
+[mergetool]
+  keepBackup = false
+[difftool]
+  prompt = false
+[help]
+  autocorrect = 1
+[credential]
+  helper = osxkeychain
+[psh]
+  default = simple
+[status]
+  submoduleSummary = true
+[diff]
+  submodule = log
+  compactionHeuristic = true
+[rebase]
+  autostash = true
+[magit]
+  hideCampaign = true
+[diff "gpg"]
+  textconv = gpg --no-tty --decrypt
+[includeIf "gitdir:~/code/tg/"]
+    path = ~/code/tg/.gitconfig
+[includeIf "gitdir:~/dev/tg/"]
+    path = ~/dev/tg/.gitconfig
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+[github]
+  user = jcsims
+[sendmail]
+  verify = off
+[github "github.threatbuild.com/api/v3"]
+  user = chrsims
+[fetch]
+	prune = true
+[init]
+	defaultBranch = main
+[gpg]
+	program = gpg2

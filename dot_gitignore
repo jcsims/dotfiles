@@ -1,0 +1,82 @@
+.DS_Store
+Session.vim
+vim/**/bundle
+.netrwhist
+tags
+viminfo
+
+# Haskell files
+dist
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+.virthualenv
+
+# LaTeX
+*.acn
+*.acr
+*.aux
+*.alg
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.idx
+*.ilg
+*.ind
+*.ist
+*.lof
+*.log
+*.lot
+*.maf
+*.mtc
+*.mtc0
+*.nav
+*.nlo
+*.out
+*.pdfsync
+*.ps
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdy
+*.tdo
+
+# Java files
+*.class
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+*-autoloads.el
+*.info
+dir
+flycheck_*.el
+*-pkg.el
+*-autoloads.el
+
+
+# Org-mode
+.org-id-locations
+
+# Global
+GPATH
+GRTAGS
+GTAGS
+
+# Clojure/Emacs
+.clj-kondo
