@@ -850,8 +850,6 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   :config (when (eq system-type 'gnu/linux)
             (setq browse-url-browser-function 'browse-url-xdg-open)))
 
-(use-package rg)
-
 (use-package wgrep)
 
 (use-package json-snatcher
@@ -947,9 +945,6 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package unicode-fonts
   :config
   (unicode-fonts-setup))
-
-(use-package whitespace-cleanup-mode
-  :config (global-whitespace-cleanup-mode))
 
 (use-package xref
   :ensure f
