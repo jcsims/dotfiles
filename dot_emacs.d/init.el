@@ -187,11 +187,6 @@
   (add-hook 'prog-mode-hook #'indicate-buffer-boundaries-left))
 
 ;; Quick access to a few files
-(defun find-init-file ()
-  "Open the init file for editing."
-  (interactive)
-  (find-file "~/.emacs.d/init.el"))
-(global-set-key (kbd "C-c e e") 'find-init-file)
 
 (defvar org-dir "~/org/")
 (defvar jcs/projects-file (expand-file-name "projects.org" org-dir))
@@ -576,6 +571,14 @@
                          whitespace-cleanup-mode))
   (minions-mode))
 
+(defun find-init-file ()
+  "Open the init file for editing."
+  (interactive)
+  (if (eq system-type 'darwin)
+      (find-file (string-trim
+		  (shell-command-to-string "chezmoi source-path ~/.emacs.d/init.el")))
+    (find-file "~/.emacs.d/init.el")))
+
 (use-package simple
   :ensure f
   :after org
@@ -583,7 +586,9 @@
   :config
   (column-number-mode)
   (setq-default what-cursor-show-names t)
-  :bind ("M-SPC" . cycle-spacing)
+  :bind
+  ("M-SPC" . cycle-spacing)
+  ("C-c e e" . find-init-file)
   :hook ((text-mode org-mode markdown-mode) . turn-on-auto-fill))
 
 (use-package text-mode
