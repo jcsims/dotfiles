@@ -233,29 +233,18 @@
                              (jcs/next-file . (:level . 1))
                              (jcs/tickler-file . (:level . 1))
                              (jcs/reference-file . (:level . 1)))
-        org-tag-alist (quote (("@work" . ?w)
-                              ("@errand" . ?E)
-                              ("@home" . ?h)
-                              ("@computer" . ?c)
-                              ("@phone" . ?p)
+        org-tag-alist (quote (("@alex" . ?a)
+                              ("@tim" . ?t)
+                              ("@austin" . ?h)
+                              ("@michael" . ?m)
+                              ("@armando" . ?b)
+                              ("@mary" . ?s)
                               (:newline)
-                              ("@kasey" . ?k)
-                              ("@alex" . ?a)
-                              ("@parents" . ?P)
-                              ("james" . ?j)
-                              (:newline)
-                              ("weekend" . ?W)
-                              ("evening" . ?e)
-                              ("business_hours" . ?b)
-                              ("learning" . ?l)
-                              ("project_idea" . ?i)
-                              (:newline)
-                              ("high_effort" . ?H)
-                              ("quick_win" . ?q)
-                              ("focus" . ?f)))
+                              ;; Anything else?
+                              ))
         org-todo-keywords
         (quote ((sequence "TODO(t)" "DOING(o)" "|" "DONE(d)")
-                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
+                (sequence "WAITING(w@/!)" "DELEGATED(e@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
   (defun find-projects-file () (interactive) (find-file jcs/projects-file))
   (defun find-someday-file () (interactive) (find-file jcs/someday-file))
   (defun find-inbox-file () (interactive) (find-file jcs/inbox-file))
@@ -326,7 +315,7 @@
          ;; ;; `org-backward-paragraph' and `org-forward-paragraph'.)
          ;; ([remap backward-paragraph] . org-backward-paragraph)
          ;; ([remap forward-paragraph] . org-forward-paragraph)
-	 ))
+         ))
 
 (use-package org-tempo :ensure org)
 
@@ -400,11 +389,14 @@
             (todo ""
                   ((org-agenda-overriding-header "To Refile")
                    (org-agenda-files jcs/inbox-files)))
+            (todo "DOING"
+                  ((org-agenda-overriding-header "In Progress")
+                   (org-agenda-files jcs/non-inbox-files)))
             (todo "WAITING"
                   ((org-agenda-overriding-header "Waiting")
                    (org-agenda-files jcs/non-inbox-files)))
-            (todo "DOING"
-                  ((org-agenda-overriding-header "In Progress")
+            (todo "DELEGATED"
+                  ((org-agenda-overriding-header "Delegated")
                    (org-agenda-files jcs/non-inbox-files)))
             (todo "TODO"
                   ((org-agenda-overriding-header "Todo")
@@ -576,7 +568,7 @@
   (interactive)
   (if (eq system-type 'darwin)
       (find-file (string-trim
-		  (shell-command-to-string "chezmoi source-path ~/.emacs.d/init.el")))
+                  (shell-command-to-string "chezmoi source-path ~/.emacs.d/init.el")))
     (find-file "~/.emacs.d/init.el")))
 
 (use-package simple
