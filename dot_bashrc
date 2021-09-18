@@ -103,10 +103,6 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 
     #export JAVA_HOME=$(brew --prefix openjdk)
 
-    ## Intel-version paths get added towards the end, so we favor arm64 variants when possible
-    append_path /usr/local/bin
-    append_path /usr/local/sbin
-
     # Add an explicit alias here, so that we can call the intel variant when needed
     alias ibrew='arch -x86_64 /usr/local/bin/brew'
 
