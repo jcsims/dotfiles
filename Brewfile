@@ -43,6 +43,7 @@ brew "postgresql", restart_service: true
 brew "redis", restart_service: true
 
 cask "aerial"
+cask "alacritty"
 cask "anybar"
 cask "calibre"
 cask "dash"
