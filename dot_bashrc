@@ -90,21 +90,16 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    # Add GOROOT bin path to PATH
-    append_path /usr/local/go/bin
+    # Brew-installed paths, arm64 variant
+    prepend_path /opt/homebrew/bin
+    prepend_path /opt/homebrew/sbin
+
 
     export BASH_COMPLETION_COMPAT_DIR="/opt/homebrew/etc/bash_completion.d"
 
     [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
-    # Brew-installed paths, arm64 variant
-    prepend_path /opt/homebrew/bin
-    prepend_path /opt/homebrew/sbin
-
     #export JAVA_HOME=$(brew --prefix openjdk)
-
-    # Add an explicit alias here, so that we can call the intel variant when needed
-    alias ibrew='arch -x86_64 /usr/local/bin/brew'
 
     # Add installed-from-source Postgres binary and manpage paths
     append_path /usr/local/pgsql/bin
@@ -113,11 +108,6 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     alias stay-awake='caffeinate -di'
 
     alias alert='terminal-notifier -activate "com.googlecode.iterm2" -message "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-    source "$HOME/.cargo/env"
-
-    export GOPATH=$HOME/dev/go:$HOME/dev/tg/sandcastle:$HOME/dev/tg/ops
-    export GOBIN=$HOME/bin
 
     # Base16 Shell
     BASE16_SHELL="$HOME/.config/base16-shell/"
