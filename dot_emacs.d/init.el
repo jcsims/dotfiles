@@ -566,10 +566,8 @@
 (defun find-init-file ()
   "Open the init file for editing."
   (interactive)
-  (if (eq system-type 'darwin)
-      (find-file (string-trim
-                  (shell-command-to-string "chezmoi source-path ~/.emacs.d/init.el")))
-    (find-file "~/.emacs.d/init.el")))
+  (find-file (string-trim
+              (shell-command-to-string "chezmoi source-path ~/.emacs.d/init.el"))))
 
 (use-package simple
   :ensure f
