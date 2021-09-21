@@ -140,12 +140,13 @@
       ('dark (modus-themes-load-vivendi)))))
 
 (use-package modus-themes
-  ;;:disabled
+  :disabled
   :init (modus-themes-load-themes)
   :config (if (eq system-type 'darwin)
-              (jcs/apply-theme ns-system-appearance)
-            (load-theme 'gruvbox-dark-soft t))
-  (setq ns-system-appearance-change-functions '(jcs/apply-theme)))
+              (progn
+                (jcs/apply-theme ns-system-appearance)
+                (setq ns-system-appearance-change-functions '(jcs/apply-theme)))
+            (modus-themes-load-vivendi)))
 
 ;; (setq base16-theme-256-color-source 'base16-shell
 ;;       jcs-active-theme 'base16-tomorrow-night-eighties
@@ -164,7 +165,7 @@
 ;;       jcs-light-theme 'gruvbox-light-medium
 ;;       jcs-dark-theme 'gruvbox-dark-hard)
 
-;;(load-theme jcs-active-theme t)
+(load-theme jcs-active-theme t)
 
 (defun toggle-dark-light-theme ()
   "Toggle the current theme between light and dark."
