@@ -946,6 +946,10 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package sql-indent
   :hook (sql-mode . sqlind-minor-mode))
 
+(use-package hideshow
+  :ensure f
+  :hook (prog-mode . hs-minor-mode))
+
 ;; Local personalization
 (let ((file (expand-file-name (concat (user-real-login-name) ".el")
                               user-emacs-directory)))
