@@ -837,9 +837,6 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package json-snatcher
   :config (setq jsons-path-printer 'jsons-print-path-jq))
 
-(use-package json-mode
-  :custom (json-reformat:indent-width 2))
-
 (use-package jq-mode)
 
 ;; LSP
@@ -922,11 +919,6 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package newcomment
   :ensure f
   :config (global-set-key [remap comment-dwim] #'comment-line))
-
-;; Emoji support
-(use-package unicode-fonts
-  :config
-  (unicode-fonts-setup))
 
 (use-package xref
   :ensure f
