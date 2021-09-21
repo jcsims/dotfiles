@@ -34,93 +34,76 @@ prepend_path () {
     esac
 }
 
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
+{{ if (eq .chezmoi.os "linux") }}
 
-    if [ -f /etc/bashrc ]; then
-        . /etc/bashrc
-    fi
-
-    # Add an "alert" alias for long running commands.  Use like so:
-    #   sleep 10; alert
-    alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-    alias ls='ls --color=auto'
-
-    alias open='xdg-open'
-
-    [ -f /usr/share/skim/completion.bash ] && source /usr/share/skim/completion.bash
-    [ -f /usr/share/skim/key-bindings.bash ] && source /usr/share/skim/key-bindings.bash
-
-    export GOPATH=$HOME/code/go:$HOME/code/tg/sandcastle
-    export GOBIN=$HOME/bin
-
-    # Base16 Shell
-    # https://github.com/chriskempson/base16-shell
-    BASE16_SHELL="$HOME/.config/base16-shell/"
-    [ -n "$PS1" ] && \
-        [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        eval "$("$BASE16_SHELL/profile_helper.sh")"
-
-    ## Set the terminal theme
-    [ -f $HOME/.base16_theme ] && source $HOME/.base16_theme
-
-    ## Nix support
-    [ -f /etc/profile.d/nix.sh ] && source /etc/profile.d/nix.sh
-
-    export XDG_DESKTOP_DIR="$HOME"
-    export XDG_DOWNLOAD_DIR="$HOME/downloads"
-    export XDG_DOCUMENTS_DIR="$HOME/documents"
-    export XDG_MUSIC_DIR="$HOME/music"
-    export XDG_PICTURES_DIR="$HOME/pictures"
-    export XDG_VIDEOS_DIR="$HOME/videos"
-
-    if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-        export MOZ_ENABLE_WAYLAND=1
-        export GDK_SCALE=2
-        export _JAVA_AWT_WM_NONREPARENTING=1
-        export XDG_CURRENT_DESKTOP=sway
-        export XDG_SESSION_TYPE=wayland
-        export CLUTTER_BACKEND=wayland
-        export QT_QPA_PLATFORM=wayland
-        export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-        export SDL_VIDEODRIVER=wayland
-        eval "$(keychain --eval --quiet --agents gpg,ssh id_rsa 98662236EE64EFAF0BE9973025FF041622DE3AFB)"
-        exec sway
-    fi
-
-
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    # Brew-installed paths, arm64 variant
-    prepend_path /opt/homebrew/bin
-    prepend_path /opt/homebrew/sbin
-
-
-    export BASH_COMPLETION_COMPAT_DIR="/opt/homebrew/etc/bash_completion.d"
-
-    [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
-
-    #export JAVA_HOME=$(brew --prefix openjdk)
-
-    # Add installed-from-source Postgres binary and manpage paths
-    append_path /usr/local/pgsql/bin
-    export MANPATH=/usr/local/pgsql/share/man:$MANPATH
-
-    alias stay-awake='caffeinate -di'
-
-    alias alert='terminal-notifier -activate "com.googlecode.iterm2" -message "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-    # Base16 Shell
-    BASE16_SHELL="$HOME/.config/base16-shell/"
-    [ -n "$PS1" ] && \
-        [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        eval "$("$BASE16_SHELL/profile_helper.sh")"
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
 fi
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+alias ls='ls --color=auto'
+
+alias open='xdg-open'
+
+[ -f /usr/share/skim/completion.bash ] && source /usr/share/skim/completion.bash
+[ -f /usr/share/skim/key-bindings.bash ] && source /usr/share/skim/key-bindings.bash
+
+## Nix support
+[ -f /etc/profile.d/nix.sh ] && source /etc/profile.d/nix.sh
+
+export XDG_DESKTOP_DIR="$HOME"
+export XDG_DOWNLOAD_DIR="$HOME/downloads"
+export XDG_DOCUMENTS_DIR="$HOME/documents"
+export XDG_MUSIC_DIR="$HOME/music"
+export XDG_PICTURES_DIR="$HOME/pictures"
+export XDG_VIDEOS_DIR="$HOME/videos"
+
+if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+    export MOZ_ENABLE_WAYLAND=1
+    export GDK_SCALE=2
+    export _JAVA_AWT_WM_NONREPARENTING=1
+    export XDG_CURRENT_DESKTOP=sway
+    export XDG_SESSION_TYPE=wayland
+    export CLUTTER_BACKEND=wayland
+    export QT_QPA_PLATFORM=wayland
+    export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+    export SDL_VIDEODRIVER=wayland
+    eval "$(keychain --eval --quiet --agents gpg,ssh id_rsa 98662236EE64EFAF0BE9973025FF041622DE3AFB)"
+    exec sway
+fi
+
+{{ else if (eq .chezmoi.os "darwin" ) }}
+# Brew-installed paths, arm64 variant
+prepend_path /opt/homebrew/bin
+prepend_path /opt/homebrew/sbin
+
+
+export BASH_COMPLETION_COMPAT_DIR="/opt/homebrew/etc/bash_completion.d"
+
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+
+#export JAVA_HOME=$(brew --prefix openjdk)
+
+# Add installed-from-source Postgres binary and manpage paths
+append_path /usr/local/pgsql/bin
+export MANPATH=/usr/local/pgsql/share/man:$MANPATH
+
+alias stay-awake='caffeinate -di'
+
+alias alert='terminal-notifier -activate "com.googlecode.iterm2" -message "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Base16 Shell
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+    eval "$("$BASE16_SHELL/profile_helper.sh")"
+{{ end }}
 
 # Set the theme for `bat`
 export BAT_THEME="Nord"
-
-# Cargo's bin path
-append_path $HOME/.cargo/bin
 
 # Sensible options, borrowed from
 # https://github.com/mrzool/bash-sensible
