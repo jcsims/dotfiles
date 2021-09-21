@@ -642,15 +642,6 @@
   ;; Enable M-. and M-, along with C-c C-d {c,C-d} for elisp
   :hook ((emacs-lisp-mode ielm-mode) . elisp-slime-nav-mode))
 
-(use-package highlight-symbol
-  :bind (:map mode-specific-map
-              ("h h" . highlight-symbol)
-              ("h r" . highlight-symbol-remove-all)
-              ("h l" . highlight-symbol-list-all)
-              ("h n" . highlight-symbol-next)
-              ("h p" . highlight-symbol-prev)
-              ("h a" . highlight-symbol-nav-mode)))
-
 (use-package flycheck
   :config (global-flycheck-mode)
   :bind (:map flycheck-mode-map
