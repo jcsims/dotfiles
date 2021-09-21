@@ -25,7 +25,6 @@
 (package-initialize)
 
 ;; Setup use-package
-
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -396,14 +395,14 @@
             (todo "WAITING"
                   ((org-agenda-overriding-header "Waiting")
                    (org-agenda-files jcs/non-inbox-files)))
-            (todo "DELEGATED"
-                  ((org-agenda-overriding-header "Delegated")
-                   (org-agenda-files jcs/non-inbox-files)))
             (todo "TODO"
                   ((org-agenda-overriding-header "Todo")
                    (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled deadline)))))
+            (todo "DELEGATED"
+                  ((org-agenda-overriding-header "Delegated")
+                   (org-agenda-files jcs/non-inbox-files)))
             (todo "HOLD"
                   ((org-agenda-overriding-header "On Hold")
                    (org-agenda-files jcs/non-inbox-files)
