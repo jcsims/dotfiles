@@ -174,10 +174,10 @@ If region is active, apply to active region instead."
 (defun cleanup-buffer ()
   "Cleanup the buffer, including whitespace and indentation."
   (interactive)
-  (unless (member major-mode jcs/tab-sensitive-modes)
-    (untabify (point-min) (point-max)))
   (unless (member major-mode jcs/indent-sensitive-modes)
     (indent-region (point-min) (point-max)))
+  (unless (member major-mode jcs/tab-sensitive-modes)
+    (untabify (point-min) (point-max)))
   (whitespace-cleanup))
 
 ;; Info about installed packages, and where they came from. Stolen
