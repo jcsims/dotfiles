@@ -24,6 +24,10 @@
         ("org" . "https://orgmode.org/elpa/")))
 (package-initialize)
 
+;; Using this requires the use of package-quickstart-refresh is
+;; changed (e.g. when a new package is installed, or updated).
+(setq package-quickstart t)
+
 ;; Setup use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -520,6 +524,12 @@
   (setq paradox-execute-asynchronously t
         paradox-github-token (cadr (auth-source-user-and-password
                                     "api.github.com" "jcsims^paradox")))
+  ;; This is used in conjunction with `package-quickstart', to ensure
+  ;; that the autoloads file is regenerated after any package actions.
+  (add-to-list 'paradox-after-execute-functions
+               (lambda (_)
+                 (package-quickstart-refresh))
+               t)
   (paradox-enable))
 
 (use-package macrostep
