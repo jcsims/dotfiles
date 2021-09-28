@@ -202,7 +202,6 @@
 (defvar jcs/checklists-file (expand-file-name "reference/checklists.org" org-dir))
 (defvar jcs/archive-file (expand-file-name "archive/archive.org" org-dir))
 (defvar jcs/habit-file (expand-file-name "habit.org" org-dir))
-(defvar jcs/log-dir (expand-file-name "log/" org-dir))
 
 (use-package org
   :custom
@@ -230,8 +229,7 @@
                                jcs/inbox-file
                                jcs/someday-file
                                jcs/next-file
-                               jcs/tickler-file
-                               (expand-file-name "log/" org-dir)))
+                               jcs/tickler-file))
   (setq org-refile-targets '((jcs/projects-file . (:maxlevel . 2))
                              (jcs/someday-file . (:level . 0))
                              (jcs/next-file . (:level . 1))
@@ -379,8 +377,7 @@
                                jcs/tickler-file
                                jcs/next-file
                                jcs/inbox-file
-                               jcs/habit-file
-                               jcs/log-dir)
+                               jcs/habit-file)
         jcs/non-inbox-files (remq jcs/inbox-file
                                   jcs/agenda-files)
         jcs/inbox-files (list jcs/inbox-file))
