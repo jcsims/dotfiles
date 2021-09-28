@@ -24,10 +24,6 @@
         ("org" . "https://orgmode.org/elpa/")))
 (package-initialize)
 
-;; Using this requires the use of package-quickstart-refresh is
-;; changed (e.g. when a new package is installed, or updated).
-(setq package-quickstart t)
-
 ;; Setup use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -190,6 +186,9 @@
     (setq indicate-buffer-boundaries 'left))
   (add-hook 'prog-mode-hook #'indicate-buffer-boundaries-left))
 
+(use-package windmove
+  :config (windmove-default-keybindings '(super meta)))
+
 ;; Quick access to a few files
 
 (defvar org-dir "~/org/")
@@ -285,39 +284,7 @@
          ("C-c e r" . find-reference-file)
          ("C-c e c" . find-checklists-file)
          ("C-c e h" . find-habit-file)
-         ("C-c e l" . visit-todays-log)
-
-         ;; Below stolen from
-         ;; https://github.com/raxod502/radian/blob/ee92ea6cb0473bf7d20c6d381753011312ef4a52/radian-emacs/radian-org.el
-         ;; :map org-mode-map
-
-         ;; ;; Prevent Org from overriding the bindings for windmove. By
-         ;; ;; default, these keys are mapped to `org-shiftleft', etc.
-         ;; ("S-<left>" . nil)
-         ;; ("S-<right>" . nil)
-         ;; ("S-<up>" . nil)
-         ;; ("S-<down>" . nil)
-
-         ;; ;; Add replacements for the keybindings we just removed.
-         ;; ;; C-<left> and C-<right> are unused by Org. C-<up> and
-         ;; ;; C-<down> are bound to `org-backward-paragraph', etc. (but
-         ;; ;; see below).
-         ;; ("C-<left>" . org-shiftleft)
-         ;; ("C-<right>" . org-shiftright)
-         ;; ("C-<up>" . org-shiftup)
-         ;; ("C-<down>" . org-shiftdown)
-
-         ;; ;; By default, Org maps C-<up> to `org-backward-paragraph'
-         ;; ;; instead of `backward-paragraph' (and analogously for
-         ;; ;; C-<down>). However, it doesn't do the same remapping for
-         ;; ;; the other bindings of `backward-paragraph' (e.g. M-{).
-         ;; ;; Here we establish that remapping. (This is important since
-         ;; ;; we remap C-<up> and C-<down> to other things, above. So
-         ;; ;; otherwise there would be no easy way to invoke
-         ;; ;; `org-backward-paragraph' and `org-forward-paragraph'.)
-         ;; ([remap backward-paragraph] . org-backward-paragraph)
-         ;; ([remap forward-paragraph] . org-forward-paragraph)
-         ))
+         ("C-c e l" . visit-todays-log)))
 
 (use-package org-tempo :ensure org)
 
@@ -352,21 +319,6 @@
 (use-package org-agenda
   :ensure org
   :after org
-  :bind (:map org-agenda-mode-map
-
-              ;; Prevent Org Agenda from overriding the bindings for
-              ;; windmove.
-              ("S-<up>" . nil)
-              ("S-<down>" . nil)
-              ("S-<left>" . nil)
-              ("S-<right>" . nil)
-
-              ;; Same routine as above. Now for Org Agenda, we could use
-              ;; C-up and C-down because M-{ and M-} are bound to the same
-              ;; commands. But I think it's best to take the same approach
-              ;; as before, for consistency.
-              ("C-<left>" . org-agenda-do-date-earlier)
-              ("C-<right>" . org-agenda-do-date-later))
   :config
   ;; TODO: Use a `let*` binding here and turn on lexical scoping for
   ;; this file.
@@ -449,7 +401,10 @@
            (file "~/org/weekly-review-template.org"))
           ("h" "Housework log" entry
            (file+datetree "~/org/log/housework-log.org")
-           "* %i%? \n %U"))))
+           "* %i%? \n %U")
+          ("l" "Log" entry
+           (function visit-todays-log)
+           "* %i%?"))))
 
 (use-package autorevert
   :ensure f
@@ -521,12 +476,6 @@
   (setq paradox-execute-asynchronously t
         paradox-github-token (cadr (auth-source-user-and-password
                                     "api.github.com" "jcsims^paradox")))
-  ;; This is used in conjunction with `package-quickstart', to ensure
-  ;; that the autoloads file is regenerated after any package actions.
-  (add-to-list 'paradox-after-execute-functions
-               (lambda (_)
-                 (package-quickstart-refresh))
-               t)
   (paradox-enable))
 
 (use-package macrostep
@@ -543,7 +492,11 @@
 
 ;; External user config
 (use-package init-funcs
+  :demand
   :ensure f
+  :bind (("C-c C-f" . goto-next-file)
+         ("C-c f" . goto-next-file)
+         ("C-c n". cleanup-buffer))
   :load-path "lisp")
 
 (use-package whitespace
@@ -735,10 +688,6 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 
 (use-package git-timemachine)
 
-(use-package windmove
-  :disabled
-  :config (windmove-default-keybindings))
-
 (use-package paredit
   :hook (emacs-lisp-mode . paredit-mode))
 
@@ -881,7 +830,6 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 
 (use-package crux
   :bind (("C-x 4 t" . crux-transpose-windows)
-         ("C-c n". cleanup-buffer)
          ("C-a" . crux-move-beginning-of-line)))
 
 (use-package help

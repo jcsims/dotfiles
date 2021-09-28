@@ -77,7 +77,7 @@ If region is active, apply to active region instead."
     (eshell-send-input)))
 
 (add-hook 'eshell-mode-hook
-          '(lambda()
+          '(lambda ()
              (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
 
 (defun dired-do-ispell (&optional arg)
@@ -109,6 +109,7 @@ If region is active, apply to active region instead."
 (add-hook 'prog-mode-hook 'esk-local-comment-auto-fill)
 ;;(add-hook 'prog-mode-hook 'esk-pretty-lambdas)
 
+(require 'use-package)
 (use-package magit-git :ensure magit)
 (use-package git-commit :ensure magit)
 (defun jcs/magit-commit-template (&rest _)
@@ -153,14 +154,6 @@ If region is active, apply to active region instead."
 (defun random-lowercase-char ()
   "Return a random lowercase character, from a-z."
   (format "%c" (+ 97 (random 26))))
-
-;; Taken from technomancy's emacs.d
-(global-set-key (kbd "C-c n")
-                (defun pnh-cleanup-buffer ()
-                  (interactive)
-                  (delete-trailing-whitespace)
-                  (untabify (point-min) (point-max))
-                  (indent-region (point-min) (point-max))))
 
 (defvar jcs/tab-sensitive-modes '(makefile-bsdmake-mode))
 (defvar jcs/indent-sensitive-modes '(conf-mode
@@ -236,6 +229,19 @@ packages installed from each archive."
    (mapcar #'car arch-pkgs)
    nil))
 
+;; Stolen from https://emacs.stackexchange.com/a/12164
+(defun goto-next-file (&optional backward)
+  "Find the next file (by name) in the current directory.
+
+With prefix argument BACKWARD, find the previous file."
+  (interactive "P")
+  (when buffer-file-name
+    (let* ((file (expand-file-name buffer-file-name))
+           (files (cl-remove-if (lambda (file) (cl-first (file-attributes file)))
+                                (sort (directory-files (file-name-directory file) t nil t) 'string<)))
+           (pos (mod (+ (cl-position file files :test 'equal) (if backward -1 1))
+                     (length files))))
+      (find-file (nth pos files)))))
 
 (provide 'init-funcs)
 ;;; init-funcs.el ends here
