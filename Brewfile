@@ -22,6 +22,8 @@ brew "gnutls"
 brew "git"
 brew "htop"
 brew "jq"
+# Mac App Store command-line util
+brew "mas"
 brew "leiningen"
 # For the system Java wrappers to find this JDK, symlink it with
 #  sudo ln -sfn /opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
@@ -44,8 +46,8 @@ brew "clojure-lsp/brew/clojure-lsp-native"
 brew "d12frosted/emacs-plus/emacs-plus@28"
 
 ## Services
-brew "postgresql", restart_service: true
-brew "redis", restart_service: true
+brew "postgresql", restart_service: :changed
+brew "redis", restart_service: :changed
 
 cask "aerial"
 cask "alacritty"
@@ -59,7 +61,6 @@ cask "font-iosevka-nerd-font"
 cask "gpg-suite" # gpg-tools
 cask "jetbrains-toolbox"
 cask "keybase"
-cask "lagrange"
 cask "mattermost"
 cask "monitorcontrol"
 cask "obsidian"
