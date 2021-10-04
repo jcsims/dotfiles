@@ -241,8 +241,9 @@
                               ("@armando" . ?b)
                               ("@mary" . ?s)
                               (:newline)
-                              ;; Anything else?
-                              ))
+                              ("important" . ?i)
+                              ("urgent" . ?u)
+                              ("to_delegate" . ?d)))
         org-todo-keywords
         (quote ((sequence "TODO(t)" "DOING(o)" "|" "DONE(d)")
                 (sequence "WAITING(w@/!)" "DELEGATED(e@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
@@ -347,7 +348,9 @@
                    (org-agenda-files jcs/non-inbox-files)))
             (todo "WAITING"
                   ((org-agenda-overriding-header "Waiting")
-                   (org-agenda-files jcs/non-inbox-files)))
+                   (org-agenda-files jcs/non-inbox-files)
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-if nil '(scheduled)))))
             (todo "TODO"
                   ((org-agenda-overriding-header "Todo")
                    (org-agenda-files jcs/non-inbox-files)
@@ -355,12 +358,14 @@
                     '(org-agenda-skip-if nil '(scheduled deadline)))))
             (todo "DELEGATED"
                   ((org-agenda-overriding-header "Delegated")
-                   (org-agenda-files jcs/non-inbox-files)))
+                   (org-agenda-files jcs/non-inbox-files)
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-if nil '(scheduled)))))
             (todo "HOLD"
                   ((org-agenda-overriding-header "On Hold")
                    (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
-                    '(org-agenda-skip-if nil '(scheduled deadline))))))))))
+                    '(org-agenda-skip-if nil '(scheduled))))))))))
 
 (use-package org-capture
   :ensure org
