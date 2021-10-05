@@ -115,7 +115,8 @@
 
 ;; Font
 (if (eq system-type 'gnu/linux)
-    (set-frame-font "Hack 9")
+    ;; provided in the AUR by `nerd-font-hack`
+    (set-frame-font "Hack Nerd Font 9")
   (set-frame-font "Hack Nerd Font 12"))
 
 ;;; Themes
