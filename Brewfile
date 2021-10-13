@@ -31,6 +31,7 @@ brew "openjdk@11"
 brew "pass"
 brew "restic"
 brew "ripgrep"
+brew "rustup-init"
 brew "shellcheck"
 brew "sk"
 brew "starship"
@@ -46,7 +47,7 @@ brew "clojure-lsp/brew/clojure-lsp-native"
 brew "d12frosted/emacs-plus/emacs-plus@28"
 
 ## Services
-brew "postgresql", restart_service: :changed
+brew "postgresql@13", restart_service: :changed, link: true
 brew "redis", restart_service: :changed
 
 cask "aerial"
