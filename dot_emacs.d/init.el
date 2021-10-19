@@ -48,6 +48,9 @@
 
 (setq source-directory (concat "~/code/emacs-" emacs-version))
 
+;; Sentences can end with a single space.
+(setq sentence-end-double-space nil)
+
 (use-package no-littering
   :config
   (require 'files)
@@ -194,20 +197,13 @@
 
 (defvar org-dir "~/org/")
 (defvar jcs/projects-file (expand-file-name "projects.org" org-dir))
-(defvar jcs/someday-file (expand-file-name "someday.org" org-dir))
 (defvar jcs/next-file (expand-file-name "next.org" org-dir))
 (defvar jcs/tickler-file (expand-file-name "tickler.org" org-dir))
 (defvar jcs/inbox-file (expand-file-name "inbox.org" org-dir))
 (defvar jcs/reference-file (expand-file-name "reference/reference.org" org-dir))
-(defvar jcs/checklists-file (expand-file-name "reference/checklists.org" org-dir))
 (defvar jcs/archive-file (expand-file-name "archive/archive.org" org-dir))
-(defvar jcs/habit-file (expand-file-name "habit.org" org-dir))
 
 (use-package org
-  :custom
-  (org-highest-priority ?A)
-  (org-lowest-priority ?D)
-  (org-default-priority ?C)
   :config
   (setq org-hide-leading-stars t
         org-hide-emphasis-markers t ;; Hide things like `*` for bold, etc.
@@ -227,35 +223,20 @@
         org-confirm-babel-evaluate nil
         org-agenda-files (list jcs/projects-file
                                jcs/inbox-file
-                               jcs/someday-file
                                jcs/next-file
                                jcs/tickler-file))
   (setq org-refile-targets '((jcs/projects-file . (:maxlevel . 2))
-                             (jcs/someday-file . (:level . 0))
                              (jcs/next-file . (:level . 1))
                              (jcs/tickler-file . (:level . 1))
                              (jcs/reference-file . (:level . 1)))
-        org-tag-alist (quote (("@alex" . ?a)
-                              ("@tim" . ?t)
-                              ("@austin" . ?h)
-                              ("@michael" . ?m)
-                              ("@armando" . ?b)
-                              ("@mary" . ?s)
-                              (:newline)
-                              ("important" . ?i)
-                              ("urgent" . ?u)
-                              ("to_delegate" . ?d)))
         org-todo-keywords
-        (quote ((sequence "TODO(t)" "DOING(o)" "|" "DONE(d)")
-                (sequence "WAITING(w@/!)" "DELEGATED(e@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
+        (quote ((sequence "TODO(t)" "DOING(o)" "BLOCKED(w@/!)" "|" "DONE(d)")
+                (sequence "DELEGATED(e@/!)" "HAMMOCK(h@/!)" "|" "CANCELLED(c@/!)"))))
   (defun find-projects-file () (interactive) (find-file jcs/projects-file))
-  (defun find-someday-file () (interactive) (find-file jcs/someday-file))
   (defun find-inbox-file () (interactive) (find-file jcs/inbox-file))
   (defun find-next-file () (interactive) (find-file jcs/next-file))
   (defun find-tickler-file () (interactive) (find-file jcs/tickler-file))
   (defun find-reference-file () (interactive) (find-file jcs/reference-file))
-  (defun find-checklists-file () (interactive) (find-file jcs/checklists-file))
-  (defun find-habit-file () (interactive) (find-file jcs/habit-file))
 
   ;; TODO: Write some helpers for this, e.g.:
   ;; - Search across logs
@@ -279,13 +260,10 @@
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
          ("C-c e p" . find-projects-file)
-         ("C-c e s" . find-someday-file)
          ("C-c e i" . find-inbox-file)
          ("C-c e n" . find-next-file)
          ("C-c e t" . find-tickler-file)
          ("C-c e r" . find-reference-file)
-         ("C-c e c" . find-checklists-file)
-         ("C-c e h" . find-habit-file)
          ("C-c e l" . visit-todays-log)))
 
 (use-package org-tempo :ensure org)
@@ -312,11 +290,6 @@
                                  (emacs-lisp . t)
                                  (elasticsearch . t)
                                  (restclient . t))))
-(use-package org-habit
-  :ensure org
-  :after org
-  :config
-  (setq org-habit-graph-column 80))
 
 (use-package org-agenda
   :ensure org
@@ -330,8 +303,7 @@
         jcs/agenda-files (list jcs/projects-file
                                jcs/tickler-file
                                jcs/next-file
-                               jcs/inbox-file
-                               jcs/habit-file)
+                               jcs/inbox-file)
         jcs/non-inbox-files (remq jcs/inbox-file
                                   jcs/agenda-files)
         jcs/inbox-files (list jcs/inbox-file))
@@ -344,14 +316,14 @@
             (todo ""
                   ((org-agenda-overriding-header "To Refile")
                    (org-agenda-files jcs/inbox-files)))
-            (todo "DOING"
-                  ((org-agenda-overriding-header "In Progress")
-                   (org-agenda-files jcs/non-inbox-files)))
-            (todo "WAITING"
-                  ((org-agenda-overriding-header "Waiting")
+            (todo "BLOCKED"
+                  ((org-agenda-overriding-header "Blocked")
                    (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled)))))
+            (todo "DOING"
+                  ((org-agenda-overriding-header "In Progress")
+                   (org-agenda-files jcs/non-inbox-files)))
             (todo "TODO"
                   ((org-agenda-overriding-header "Todo")
                    (org-agenda-files jcs/non-inbox-files)
@@ -362,8 +334,8 @@
                    (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled)))))
-            (todo "HOLD"
-                  ((org-agenda-overriding-header "On Hold")
+            (todo "HAMMOCK"
+                  ((org-agenda-overriding-header "Hammock")
                    (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled))))))))))
@@ -589,9 +561,8 @@
 
 ;; Flyspell mode
 (use-package flyspell
-  :hook
-  (text-mode . flyspell-mode)
-  (prog-mode . flyspell-prog-mode))
+  :hook ((text-mode . flyspell-mode)
+         (prog-mode . flyspell-prog-mode)))
 
 (use-package company
   :config
