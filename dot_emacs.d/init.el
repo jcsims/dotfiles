@@ -578,6 +578,14 @@
   ;; Enable M-. and M-, along with C-c C-d {c,C-d} for elisp
   :hook ((emacs-lisp-mode ielm-mode) . elisp-slime-nav-mode))
 
+(use-package symbol-overlay
+  :bind (:map mode-specific-map
+              ("h h" . symbol-overlay-put)
+              ("h r" . symbol-overlay-remove-all)
+              ("h m" . symbol-overlay-mode)
+              ("h n" . symbol-overlay-switch-forward)
+              ("h p" . symbol-overlay-switch-backward)))
+
 (use-package flycheck
   :config (global-flycheck-mode)
   :bind (:map flycheck-mode-map
