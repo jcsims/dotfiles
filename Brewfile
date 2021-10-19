@@ -17,6 +17,7 @@ brew "cmake"
 brew "coreutils"
 brew "curl"
 brew "fd"
+brew "ffmpeg" # used by youtube-dl
 brew "gcc"
 brew "gnutls"
 brew "git"
