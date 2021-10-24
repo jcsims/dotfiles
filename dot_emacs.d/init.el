@@ -669,6 +669,8 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
                           'magit-insert-stashes
                           'append))
 
+(use-package git-modes)
+
 (use-package magit-libgit :after magit)
 
 (use-package git-timemachine)
