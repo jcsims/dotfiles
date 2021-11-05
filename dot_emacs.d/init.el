@@ -750,6 +750,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   (nrepl-use-ssh-fallback-for-remote-hosts t)
   (cider-repl-print-length nil)
   (cider-auto-jump-to-error 'errors-only)
+  (cider-font-lock-dynamically (delete 'deprecated cider-font-lock-dynamically))
   :config
   ;; kill REPL buffers for a project as well
   (add-to-list 'project-kill-buffer-conditions
