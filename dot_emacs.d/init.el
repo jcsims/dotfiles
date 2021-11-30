@@ -270,6 +270,19 @@
 
 (use-package ox-md :ensure org)
 
+(use-package org-roam
+  :init (setq org-roam-v2-ack t)
+  :custom (org-roam-directory (file-truename "~/org-roam"))
+  :bind (("C-c o l" . org-roam-buffer-toggle)
+         ("C-c o f" . org-roam-node-find)
+         ("C-c o g" . org-roam-graph)
+         ("C-c o i" . org-roam-node-insert)
+         ("C-c o c" . org-roam-capture)
+         ;; Dailies
+         ("C-c o j" . org-roam-dailies-capture-today))
+  :config
+  (org-roam-db-autosync-mode))
+
 (use-package restclient)
 (use-package ob-restclient)
 
