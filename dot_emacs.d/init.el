@@ -740,17 +740,21 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
    (cider-mode . cider-company-enable-fuzzy-completion))
   :bind (:map clojure-mode-map
               ("C-c i" . cider-inspect-last-result)
-              ([remap cider-find-var] . lsp-find-definition))
+              ("M-s-." . cider-find-var))
   :custom
   ;; TODO: update these paths
   (cider-jdk-src-paths '("~/code/clojure-sources"
                          "/usr/local/opt/java11/libexec/openjdk.jdk/Contents/Home/lib/src.zip"))
+  ;; This should put it after e.g. lsp
+  (cider-xref-fn-depth 90)
   (cider-save-file-on-load t)
   (cider-repl-use-pretty-printing t)
   (nrepl-use-ssh-fallback-for-remote-hosts t)
   (cider-repl-print-length nil)
   (cider-auto-jump-to-error 'errors-only)
-  (cider-font-lock-dynamically (delete 'deprecated cider-font-lock-dynamically))
+  ;; Remove 'deprecated since LSP does that as well
+  (cider-font-lock-dynamically '(macro core))
+  (cider-eldoc-display-context-dependent-info t)
   :config
   ;; kill REPL buffers for a project as well
   (add-to-list 'project-kill-buffer-conditions
@@ -798,9 +802,11 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   :commands lsp-ui-mode
   :bind (:map lsp-ui-mode-map
               ("C-M-." . xref-find-references)
-              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
               ([remap xref-find-references] . lsp-ui-peek-find-references))
-  :custom (lsp-ui-sideline-show-code-actions nil))
+  :custom
+  (lsp-ui-sideline-show-code-actions nil)
+  (lsp-ui-sideline-show-diagnostics nil)
+  (lsp-ui-doc-use-webkit t))
 
 (use-package lsp-treemacs
   :after lsp-mode
@@ -811,6 +817,9 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package flycheck-rust
   :after rust-mode
   :hook (flycheck-mode . flycheck-rust-setup))
+
+(use-package yasnippet
+  :config (yas-global-mode 1))
 
 (use-package savehist
   :ensure f
@@ -874,6 +883,9 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package hideshow
   :ensure f
   :hook (prog-mode . hs-minor-mode))
+
+(use-package winner
+  :ensure f)
 
 ;; Local personalization
 (let ((file (expand-file-name (concat (user-real-login-name) ".el")
