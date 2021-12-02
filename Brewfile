@@ -78,9 +78,14 @@ cask "openaudible"
 cask "plexamp"
 cask "rectangle"
 cask "ringcentral"
+cask "spotify"
+cask "viscosity"
 cask "webex"
 cask "wireshark"
 cask "zotero"
 
 # mac app store
 mas "Things 3", id: 904280696
+mas "HomeControl", id: 1547121417
+mas "Reeder", id: 1529448980
+mas "Deliveries", id: 290986013
