@@ -2,6 +2,7 @@ tap "borkdude/brew"
 tap "clojure/tools"
 tap "clojure-lsp/brew"
 tap "d12frosted/emacs-plus"
+tap "elastic/tap"
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
@@ -49,6 +50,7 @@ brew "borkdude/brew/babashka"
 brew "clojure/tools/clojure"
 brew "clojure-lsp/brew/clojure-lsp-native"
 brew "d12frosted/emacs-plus/emacs-plus@28"
+brew "elastic/tap/elasticsearch-full", restart_service: :changed
 
 ## Services
 brew "postgresql@13", restart_service: :changed, link: true
