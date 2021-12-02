@@ -12,7 +12,6 @@ brew "aspell"
 brew "bash"
 brew "bash-completion@2"
 brew "bat"
-brew "cask"
 brew "chezmoi"
 # To build libgit
 brew "cmake"
