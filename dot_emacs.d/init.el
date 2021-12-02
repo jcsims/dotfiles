@@ -408,7 +408,8 @@
 
 (use-package dired
   :ensure f
-  :config (setq dired-listing-switches "-alhv"))
+  :config (setq dired-listing-switches "-alhv")
+  :custom (dired-kill-when-opening-new-dired-buffer t))
 
 (use-package saveplace
   :ensure f
