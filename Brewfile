@@ -81,3 +81,6 @@ cask "ringcentral"
 cask "webex"
 cask "wireshark"
 cask "zotero"
+
+# mac app store
+mas "Things 3", id: 904280696
