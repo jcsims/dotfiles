@@ -46,6 +46,7 @@
 (if (and (version< emacs-version "28.3") (>= libgnutls-version 30600))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
+;; TODO: fix me
 (setq source-directory (concat "~/code/emacs-" emacs-version))
 
 ;; Sentences can end with a single space.
