@@ -828,7 +828,11 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   :after lsp-mode
   :config (setq treemacs-space-between-root-nodes nil))
 
-(use-package rustic)
+(use-package rustic
+  :hook (rustic-mode . (lambda ()
+                         (setq indent-tabs-mode nil)))
+  :custom
+  (rustic-lsp-format t))
 
 (use-package flycheck-rust
   :after rust-mode
