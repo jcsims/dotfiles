@@ -810,7 +810,9 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   (setq read-process-output-max (* 1024 1024))
   (setq lsp-enable-indentation nil)
   ;; Using a locally-built version
-  ;;:custom (lsp-clojure-custom-server-command "/Users/jcsims/code/clojure-lsp/clojure-lsp")
+  ;;:custom (lsp-clojure-custom-server-command
+  ;;"/Users/jcsims/code/clojure-lsp/clojure-lsp")
+  :custom (lsp-rust-analyzer-cargo-watch-command "clippy")
   :commands lsp)
 
 (use-package lsp-ui
