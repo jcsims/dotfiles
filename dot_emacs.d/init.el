@@ -770,6 +770,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   ;; Remove 'deprecated since LSP does that as well
   (cider-font-lock-dynamically '(macro core))
   (cider-eldoc-display-context-dependent-info t)
+  (cider-enrich-classpath t)
   :config
   ;; kill REPL buffers for a project as well
   (add-to-list 'project-kill-buffer-conditions
