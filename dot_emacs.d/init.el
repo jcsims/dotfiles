@@ -910,6 +910,8 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package winner
   :ensure f)
 
+(use-package go-mode)
+
 ;; Local personalization
 (let ((file (expand-file-name (concat (user-real-login-name) ".el")
                               user-emacs-directory)))
