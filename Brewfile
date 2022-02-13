@@ -29,7 +29,6 @@ brew "htop"
 brew "jq"
 # Mac App Store command-line util
 brew "mas"
-brew "leiningen"
 # For the system Java wrappers to find this JDK, symlink it with
 #  sudo ln -sfn /opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
 brew "openjdk@11"
