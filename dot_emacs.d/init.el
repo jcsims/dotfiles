@@ -232,7 +232,7 @@
                              (jcs/reference-file . (:level . 1)))
         org-todo-keywords
         (quote ((sequence "TODO(t)" "DOING(o)" "|" "DONE(d)")
-                (sequence "DELEGATED(e@/!)" "BLOCKED(w@/!)" "HAMMOCK(h@/!)" "|" "CANCELLED(c@/!)"))))
+                (sequence "DELEGATED(e@/!)" "BLOCKED(b@/!)" "HAMMOCK(h@/!)" "|" "CANCELLED(c@/!)"))))
   (defun find-projects-file () (interactive) (find-file jcs/projects-file))
   (defun find-inbox-file () (interactive) (find-file jcs/inbox-file))
   (defun find-next-file () (interactive) (find-file jcs/next-file))
