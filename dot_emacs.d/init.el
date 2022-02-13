@@ -314,6 +314,7 @@
   ;; Use the current window to open the agenda
   (setq org-agenda-window-setup 'current-window
         org-agenda-block-separator nil
+        org-agenda-tags-column -80
         jcs/agenda-files (list jcs/projects-file
                                jcs/tickler-file
                                jcs/next-file
