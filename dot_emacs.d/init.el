@@ -197,12 +197,15 @@
 ;; Quick access to a few files
 
 (defvar org-dir "~/org/")
+(defvar jcs/org-roam-dir "~/org-roam/")
 (defvar jcs/projects-file (expand-file-name "projects.org" org-dir))
 (defvar jcs/next-file (expand-file-name "next.org" org-dir))
 (defvar jcs/tickler-file (expand-file-name "tickler.org" org-dir))
 (defvar jcs/inbox-file (expand-file-name "inbox.org" org-dir))
 (defvar jcs/reference-file (expand-file-name "reference/reference.org" org-dir))
 (defvar jcs/archive-file (expand-file-name "archive/archive.org" org-dir))
+
+
 
 (use-package org
   :custom
@@ -238,7 +241,8 @@
         org-agenda-files (list jcs/projects-file
                                jcs/inbox-file
                                jcs/next-file
-                               jcs/tickler-file))
+                               jcs/tickler-file
+                               jcs/org-roam-dir))
   (setq org-refile-targets '((jcs/projects-file . (:maxlevel . 2))
                              (jcs/next-file . (:level . 1))
                              (jcs/tickler-file . (:level . 1))
@@ -332,7 +336,8 @@
         jcs/agenda-files (list jcs/projects-file
                                jcs/tickler-file
                                jcs/next-file
-                               jcs/inbox-file)
+                               jcs/inbox-file
+                               jcs/org-roam-dir)
         jcs/non-inbox-files (remq jcs/inbox-file
                                   jcs/agenda-files)
         jcs/inbox-files (list jcs/inbox-file))
@@ -345,13 +350,13 @@
           (search . " %i %-12(vulpea-agenda-category) ")))
 
   (defun vulpea-buffer-prop-get (name)
-  "Get a buffer property called NAME as a string."
-  (org-with-point-at 1
-    (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
-                             (point-max) t)
-      (buffer-substring-no-properties
-       (match-beginning 1)
-       (match-end 1)))))
+    "Get a buffer property called NAME as a string."
+    (org-with-point-at 1
+      (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
+                               (point-max) t)
+        (buffer-substring-no-properties
+         (match-beginning 1)
+         (match-end 1)))))
 
   (defun vulpea-agenda-category ()
     "Get category of item at point for agenda.
