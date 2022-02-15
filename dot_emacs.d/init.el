@@ -344,15 +344,7 @@ canceled tasks."
   (setq org-agenda-window-setup 'current-window
         org-agenda-block-separator nil
         org-agenda-tags-column -80
-        org-agenda-show-future-repeats nil
-        jcs/agenda-files (list jcs/projects-file
-                               jcs/tickler-file
-                               jcs/next-file
-                               jcs/inbox-file
-                               jcs/org-roam-dir)
-        jcs/non-inbox-files (remq jcs/inbox-file
-                                  jcs/agenda-files)
-        jcs/inbox-files (list jcs/inbox-file))
+        org-agenda-show-future-repeats nil)
 
   ;; Stolen from https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
   (setq org-agenda-prefix-format
@@ -419,35 +411,28 @@ canceled tasks."
   (setq org-agenda-custom-commands
         '(("c" "Agenda and tasks"
            ((agenda ""
-                    ((org-agenda-files jcs/agenda-files)
-                     (org-agenda-skip-function
+                    ((org-agenda-skip-function
                       '(org-agenda-skip-if nil '(todo done)))))
             (todo "BLOCKED"
                   ((org-agenda-overriding-header "Blocked")
-                   (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled)))))
             (todo "DOING"
-                  ((org-agenda-overriding-header "In Progress")
-                   (org-agenda-files jcs/non-inbox-files)))
+                  ((org-agenda-overriding-header "In Progress")))
             (todo "TODO"
                   ((org-agenda-overriding-header "Todo")
-                   (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled deadline)))))
             (todo "WAITING"
                   ((org-agenda-overriding-header "Waiting")
-                   (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled)))))
             (todo "DELEGATED"
                   ((org-agenda-overriding-header "Delegated")
-                   (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled)))))
             (todo "HAMMOCK"
                   ((org-agenda-overriding-header "Hammock")
-                   (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled))))))))))
 
