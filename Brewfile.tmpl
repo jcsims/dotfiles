@@ -1,3 +1,5 @@
+# -*- mode: ruby; -*-
+
 tap "borkdude/brew"
 tap "clojure/tools"
 tap "clojure-lsp/brew"
@@ -24,6 +26,7 @@ brew "ffmpeg" # used by youtube-dl
 brew "gcc"
 brew "gnutls"
 brew "git"
+brew "gopls"
 brew "hexyl"
 brew "htop"
 brew "jq"
@@ -69,6 +72,7 @@ cask "daisydisk"
 cask "dash"
 cask "discord"
 cask "docker"
+cask "dropbox"
 cask "font-hack-nerd-font"
 cask "gpg-suite" # gpg-tools
 cask "intellij-idea"
@@ -91,12 +95,14 @@ cask "webex"
 cask "wireshark"
 cask "zotero"
 
+{{ if (eq .chezmoi.username "jcsims") }}
 # gaming
 cask "battle-net"
 cask "gog-galaxy"
 cask "minecraft"
 cask "nvidia-geforce-now"
 cask "steam"
+{{ end }}
 
 # mac app store
 mas "Things 3", id: 904280696
