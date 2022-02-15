@@ -194,18 +194,11 @@
 (use-package windmove
   :config (windmove-default-keybindings '(super meta)))
 
+(use-package vulpea)
+
 ;; Quick access to a few files
-
 (defvar org-dir "~/org/")
-(defvar jcs/org-roam-dir "~/org-roam/")
-(defvar jcs/projects-file (expand-file-name "projects.org" org-dir))
-(defvar jcs/next-file (expand-file-name "next.org" org-dir))
-(defvar jcs/tickler-file (expand-file-name "tickler.org" org-dir))
-(defvar jcs/inbox-file (expand-file-name "inbox.org" org-dir))
-(defvar jcs/reference-file (expand-file-name "reference/reference.org" org-dir))
-(defvar jcs/archive-file (expand-file-name "archive/archive.org" org-dir))
-
-
+(defvar jcs/org-roam-dir (file-truename "~/org-roam"))
 
 (use-package org
   :custom
@@ -224,50 +217,19 @@
   :config
   (setq org-hide-leading-stars t
         org-hide-emphasis-markers t ;; Hide things like `*` for bold, etc.
-        org-archive-location (concat jcs/archive-file "::* From %s")
         org-directory org-dir
         org-log-done 'time
         org-log-into-drawer t
         org-startup-indented t
         org-startup-folded t
-        org-default-notes-file jcs/inbox-file
         org-src-fontify-natively t
         org-use-fast-todo-selection t
-        org-refile-allow-creating-parent-nodes t
-        org-refile-use-outline-path 'file
         org-outline-path-complete-in-steps nil
         ;; Don't ask every time before evaluating an org source block
-        org-confirm-babel-evaluate nil
-        org-agenda-files (list jcs/projects-file
-                               jcs/inbox-file
-                               jcs/next-file
-                               jcs/tickler-file
-                               jcs/org-roam-dir))
-  (setq org-refile-targets '((jcs/projects-file . (:maxlevel . 2))
-                             (jcs/next-file . (:level . 1))
-                             (jcs/tickler-file . (:level . 1))
-                             (jcs/reference-file . (:level . 1)))
-        org-todo-keywords
+        org-confirm-babel-evaluate nil)
+  (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "DOING(o)" "|" "DONE(d)")
                 (sequence "DELEGATED(e@/!)" "WAITING(w@/!)" "BLOCKED(b@/!)" "HAMMOCK(h@/!)" "|" "CANCELLED(c@/!)"))))
-  (defun find-projects-file () (interactive) (find-file jcs/projects-file))
-  (defun find-inbox-file () (interactive) (find-file jcs/inbox-file))
-  (defun find-next-file () (interactive) (find-file jcs/next-file))
-  (defun find-tickler-file () (interactive) (find-file jcs/tickler-file))
-  (defun find-reference-file () (interactive) (find-file jcs/reference-file))
-
-  ;; TODO: Write some helpers for this, e.g.:
-  ;; - Search across logs
-  ;; - List top-level headings across logs
-  (defun visit-todays-log ()
-    "Visit buffer for a log file for today's date."
-    (interactive)
-    (find-file (concat "~/org/log/" (format-time-string
-                                     "%Y-%m-%d.org" (current-time)))))
-
-  (defun jcs/find-log-file ()
-    (interactive)
-    (find-file (expand-file-name "log.org" org-dir)))
 
   ;; These tend to modify files, so save after doing it
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
@@ -276,30 +238,80 @@
   (advice-add 'org-agenda-todo :after 'org-save-all-org-buffers)
 
   :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
-         ("C-c e p" . find-projects-file)
-         ("C-c e i" . find-inbox-file)
-         ("C-c e n" . find-next-file)
-         ("C-c e t" . find-tickler-file)
-         ("C-c e r" . find-reference-file)
-         ("C-c e l" . visit-todays-log)))
+         ("C-c a" . org-agenda)))
 
 (use-package org-tempo :ensure org)
 
 (use-package ox-md :ensure org)
 
 (use-package org-roam
+  :after org
   :init (setq org-roam-v2-ack t)
-  :custom (org-roam-directory (file-truename "~/org-roam"))
+  :custom (org-roam-directory jcs/org-roam-dir)
   :bind (("C-c o l" . org-roam-buffer-toggle)
          ("C-c o f" . org-roam-node-find)
          ("C-c o g" . org-roam-graph)
          ("C-c o i" . org-roam-node-insert)
          ("C-c o c" . org-roam-capture)
+         ("C-c o r" . org-roam-refile)
          ;; Dailies
          ("C-c o j" . org-roam-dailies-capture-today))
+  :hook ((find-file . vulpea-project-update-tag)
+         (before-save . vulpea-project-update-tag))
   :config
-  (org-roam-db-autosync-mode))
+  (org-roam-db-autosync-mode)
+  (advice-add 'org-roam-refile :after 'org-save-all-org-buffers)
+
+  ;; Help make agenda loading faster by only including org-roam files
+  ;; with todo headers in the agenda files
+  ;; Stolen from
+  ;; https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html
+  (add-to-list 'org-tags-exclude-from-inheritance "project")
+
+  (defun vulpea-project-p ()
+    "Return non-nil if current buffer has any todo entry.
+
+TODO entries marked as done are ignored, meaning this function
+returns nil if current buffer contains only completed or
+canceled tasks."
+    (org-element-map
+        (org-element-parse-buffer 'headline)
+        'headline
+      (lambda (headline)
+        (eq (org-element-property :todo-type headline)
+            'todo))
+      nil
+      'first-match))
+
+  ;; Update org-roam node tags with a special tag to help filter
+  ;; org-agenda buffers.
+
+  (defun vulpea-project-update-tag ()
+    "Update PROJECT tag in the current buffer."
+    (when (and (not (active-minibuffer-window))
+               (org-roam-buffer-p))
+      (save-excursion
+        (goto-char (point-min))
+        (let* ((tags (vulpea-buffer-tags-get))
+               (original-tags tags))
+          (if (vulpea-project-p)
+              (setq tags (cons "project" tags))
+            (setq tags (remove "project" tags)))
+
+          ;; Remove duplicates
+          (setq tags (seq-uniq tags))
+
+          ;; Update tags in the buffer if they've changed
+          (when (or (seq-difference tags original-tags)
+                    (seq-difference original-tags tags))
+            (apply #'vulpea-buffer-tags-set tags))))))
+
+  (defun org-roam-buffer-p ()
+    "Return non-nil of the currently visited buffer is an org-roam buffer."
+    (and buffer-file-name
+         (string-prefix-p
+          (expand-file-name (file-name-as-directory org-roam-directory))
+          (file-name-as-directory buffer-file-name)))))
 
 (use-package restclient)
 (use-package ob-restclient)
@@ -344,21 +356,12 @@
 
   ;; Stolen from https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
   (setq org-agenda-prefix-format
-        '((agenda . " %i %-12(vulpea-agenda-category)%?-12t% s")
-          (todo . " %i %-12(vulpea-agenda-category) ")
-          (tags . " %i %-12(vulpea-agenda-category) ")
-          (search . " %i %-12(vulpea-agenda-category) ")))
+        '((agenda . " %i %(vulpea-agenda-category 12)%?-12t% s")
+          (todo . " %i %(vulpea-agenda-category 12) ")
+          (tags . " %i %(vulpea-agenda-category 12) ")
+          (search . " %i %(vulpea-agenda-category 12) ")))
 
-  (defun vulpea-buffer-prop-get (name)
-    "Get a buffer property called NAME as a string."
-    (org-with-point-at 1
-      (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
-                               (point-max) t)
-        (buffer-substring-no-properties
-         (match-beginning 1)
-         (match-end 1)))))
-
-  (defun vulpea-agenda-category ()
+  (defun vulpea-agenda-category (&optional len)
     "Get category of item at point for agenda.
 
      Category is defined by one of the following items:
@@ -367,6 +370,10 @@
      - TITLE keyword
      - TITLE property
      - filename without directory and extension
+
+     When LEN is a number, resulting string is padded right with
+     spaces and then truncated with ... on the right if result is
+     longer than LEN.
 
      Usage example:
 
@@ -378,13 +385,36 @@
                         (file-name-sans-extension
                          (file-name-nondirectory buffer-file-name))))
            (title (vulpea-buffer-prop-get "title"))
-           (category (org-get-category)))
-      (or (if (and
-               title
-               (string-equal category file-name))
-              title
-            category)
-          "")))
+           (category (org-get-category))
+           (result
+            (or (if (and
+                     title
+                     (string-equal category file-name))
+                    title
+                  category)
+                "")))
+      (if (numberp len)
+          (s-truncate len (s-pad-right len " " result))
+        result)))
+
+  (defun vulpea-project-files ()
+    "Return a list of org-roam files containing the 'project' tag."
+    (seq-uniq
+     (seq-map
+      #'car
+      (org-roam-db-query
+       [:select [nodes:file]
+                :from tags
+                :left-join nodes
+                :on (= tags:node-id nodes:id)
+                :where (like tag (quote "%\"project\"%"))]))))
+
+  (defun vulpea-agenda-files-update (&rest _)
+    "Update the value of `org-agenda-files' based on 'project' tag."
+    (setq org-agenda-files (vulpea-project-files)))
+
+  (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
+  (advice-add 'org-todo-list :before #'vulpea-agenda-files-update)
 
   (setq org-agenda-custom-commands
         '(("c" "Agenda and tasks"
@@ -392,9 +422,6 @@
                     ((org-agenda-files jcs/agenda-files)
                      (org-agenda-skip-function
                       '(org-agenda-skip-if nil '(todo done)))))
-            (todo ""
-                  ((org-agenda-overriding-header "To Refile")
-                   (org-agenda-files jcs/inbox-files)))
             (todo "BLOCKED"
                   ((org-agenda-overriding-header "Blocked")
                    (org-agenda-files jcs/non-inbox-files)
@@ -423,50 +450,6 @@
                    (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled))))))))))
-
-(use-package org-capture
-  :ensure org
-  :init
-  ;; ;; borrowed from https://fuco1.github.io/2017-09-02-Maximize-the-org-capture-buffer.html
-  ;; (defvar my-org-capture-before-config nil
-  ;;   "Window configuration before `org-capture'.")
-
-  (defun my-org-capture-cleanup ()
-    "Clean up the frame created while capturing."
-    ;; In case we run capture from emacs itself and not an external app,
-    ;; we want to restore the old window config
-    (-when-let ((&alist 'name name) (frame-parameters))
-      (when (equal name "capture")
-        (delete-frame))))
-
-  :bind ("C-c c" . org-capture)
-  :hook ((org-capture-after-finalize . my-org-capture-cleanup)
-         (org-capture-mode . delete-other-windows))
-  :config
-  (setq org-capture-templates
-        '(("t" "Todo [inbox]" entry
-           (file "inbox.org")
-           "* TODO %i%?")
-          ("w" "Work task [inbox]" entry
-           (file "inbox.org")
-           "* TODO %i%?      :@work:")
-          ("T" "Tickler" entry
-           (file "tickler.org")
-           "* %i%? \n %U")
-          ("r" "Reference" entry
-           (file+headline "reference/reference.org" "Reference")
-           "* %i%? \n %U")
-          ("W" "Review: Weekly Review" entry
-           ;; Destination
-           (file+datetree "~/org/weekly-reviews.org")
-           ;; Capture template
-           (file "~/org/weekly-review-template.org"))
-          ("h" "Housework log" entry
-           (file+datetree "~/org/log/housework-log.org")
-           "* %i%? \n %U")
-          ("l" "Log" entry
-           (function visit-todays-log)
-           "* %i%?"))))
 
 (use-package autorevert
   :ensure f
