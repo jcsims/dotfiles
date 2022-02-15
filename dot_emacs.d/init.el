@@ -336,6 +336,51 @@
         jcs/non-inbox-files (remq jcs/inbox-file
                                   jcs/agenda-files)
         jcs/inbox-files (list jcs/inbox-file))
+
+  ;; Stolen from https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+  (setq org-agenda-prefix-format
+        '((agenda . " %i %-12(vulpea-agenda-category)%?-12t% s")
+          (todo . " %i %-12(vulpea-agenda-category) ")
+          (tags . " %i %-12(vulpea-agenda-category) ")
+          (search . " %i %-12(vulpea-agenda-category) ")))
+
+  (defun vulpea-buffer-prop-get (name)
+  "Get a buffer property called NAME as a string."
+  (org-with-point-at 1
+    (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
+                             (point-max) t)
+      (buffer-substring-no-properties
+       (match-beginning 1)
+       (match-end 1)))))
+
+  (defun vulpea-agenda-category ()
+    "Get category of item at point for agenda.
+
+     Category is defined by one of the following items:
+
+     - CATEGORY property
+     - TITLE keyword
+     - TITLE property
+     - filename without directory and extension
+
+     Usage example:
+
+       (setq org-agenda-prefix-format
+             '((agenda . \" %(vulpea-agenda-category) %?-12t %12s\")))
+
+     Refer to `org-agenda-prefix-format' for more information."
+    (let* ((file-name (when buffer-file-name
+                        (file-name-sans-extension
+                         (file-name-nondirectory buffer-file-name))))
+           (title (vulpea-buffer-prop-get "title"))
+           (category (org-get-category)))
+      (or (if (and
+               title
+               (string-equal category file-name))
+              title
+            category)
+          "")))
+
   (setq org-agenda-custom-commands
         '(("c" "Agenda and tasks"
            ((agenda ""
