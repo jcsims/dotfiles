@@ -205,6 +205,19 @@
 (defvar jcs/archive-file (expand-file-name "archive/archive.org" org-dir))
 
 (use-package org
+  :custom
+  (org-priority-default ?C)
+  (org-priority-lowest ?D)
+  (org-tag-alist (quote (("@alex" . ?a)
+                         ("@stacey" . ?s)
+                         ("@uma" . ?u)
+                         ("@ed" . ?e)
+                         ("@tega" . ?t)
+                         (:newline)
+                         ("important" . ?i)
+                         ("urgent" . ?r)
+                         ("to_delegate" . ?d))))
+
   :config
   (setq org-hide-leading-stars t
         org-hide-emphasis-markers t ;; Hide things like `*` for bold, etc.
@@ -232,7 +245,7 @@
                              (jcs/reference-file . (:level . 1)))
         org-todo-keywords
         (quote ((sequence "TODO(t)" "DOING(o)" "|" "DONE(d)")
-                (sequence "DELEGATED(e@/!)" "BLOCKED(b@/!)" "HAMMOCK(h@/!)" "|" "CANCELLED(c@/!)"))))
+                (sequence "DELEGATED(e@/!)" "WAITING(w@/!)" "BLOCKED(b@/!)" "HAMMOCK(h@/!)" "|" "CANCELLED(c@/!)"))))
   (defun find-projects-file () (interactive) (find-file jcs/projects-file))
   (defun find-inbox-file () (interactive) (find-file jcs/inbox-file))
   (defun find-next-file () (interactive) (find-file jcs/next-file))
@@ -315,6 +328,7 @@
   (setq org-agenda-window-setup 'current-window
         org-agenda-block-separator nil
         org-agenda-tags-column -80
+        org-agenda-show-future-repeats nil
         jcs/agenda-files (list jcs/projects-file
                                jcs/tickler-file
                                jcs/next-file
@@ -344,6 +358,11 @@
                    (org-agenda-files jcs/non-inbox-files)
                    (org-agenda-skip-function
                     '(org-agenda-skip-if nil '(scheduled deadline)))))
+            (todo "WAITING"
+                  ((org-agenda-overriding-header "Waiting")
+                   (org-agenda-files jcs/non-inbox-files)
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-if nil '(scheduled)))))
             (todo "DELEGATED"
                   ((org-agenda-overriding-header "Delegated")
                    (org-agenda-files jcs/non-inbox-files)
