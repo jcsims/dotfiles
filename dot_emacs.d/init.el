@@ -505,7 +505,7 @@ canceled tasks."
   :config
   (setq whitespace-line-column 80
         fill-column 80
-        whitespace-style '(face tabs empty trailing lines-tail))
+        whitespace-style '(face indentation empty trailing lines-tail))
   :hook
   (prog-mode . whitespace-mode)
   (text-mode . whitespace-mode))
