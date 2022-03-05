@@ -129,60 +129,31 @@
 (defvar jcs-dark-theme)
 
 ;;; Themes
-(use-package solarized-theme)
-(use-package color-theme-sanityinc-tomorrow)
-(use-package base16-theme)
-(use-package gruvbox-theme)
-
-;; emacs-plus offers this handy hook to tie in to system appearance
-(defun jcs/apply-theme (appearance)
-  "Load theme, taking current system APPEARANCE into consideration."
-  (when (featurep 'ns)
-    (mapc #'disable-theme custom-enabled-themes)
-    (pcase appearance
-      ('light (modus-themes-load-operandi))
-      ('dark (modus-themes-load-vivendi)))))
-
-(use-package modus-themes
-  :disabled
-  :init (modus-themes-load-themes)
-  :config (if (eq system-type 'darwin)
-              (progn
-                (jcs/apply-theme ns-system-appearance)
-                (setq ns-system-appearance-change-functions '(jcs/apply-theme)))
-            (modus-themes-load-vivendi)))
-
-;; (setq base16-theme-256-color-source 'base16-shell
-;;       jcs-active-theme 'base16-tomorrow-night-eighties
-;;       jcs-light-theme 'base16-gruvbox-light-hard
-;;       jcs-dark-theme 'base16-tomorrow-night-eighties)
-
-;; (setq jcs-active-theme 'solarized-gruvbox-dark
-;;       jcs-light-theme 'solarized-gruvbox-light
-;;       jcs-dark-theme 'solarized-gruvbox-dark)
-
-(setq jcs-active-theme 'sanityinc-tomorrow-eighties
-      jcs-light-theme 'sanityinc-tomorrow-day
-      jcs-dark-theme 'sanityinc-tomorrow-eighties)
-
-;; (setq jcs-active-theme 'gruvbox-dark-hard
-;;       jcs-light-theme 'gruvbox-light-medium
-;;       jcs-dark-theme 'gruvbox-dark-hard)
-
-(load-theme jcs-active-theme t)
-
-(defun toggle-dark-light-theme ()
-  "Toggle the current theme between light and dark."
-  (interactive)
-  (if (eq jcs-active-theme jcs-light-theme)
-      (setq jcs-active-theme jcs-dark-theme)
-    (setq jcs-active-theme jcs-light-theme))
-  (load-theme jcs-active-theme t)
-  (sml/apply-theme 'respectful))
 
 (use-package smart-mode-line
+  :custom (sml/theme 'dark)
+  :config (sml/setup))
+
+(use-package color-theme-sanityinc-tomorrow
   :config
-  (sml/setup))
+  (setq jcs-active-theme 'sanityinc-tomorrow-eighties
+        jcs-light-theme 'sanityinc-tomorrow-day
+        jcs-dark-theme 'sanityinc-tomorrow-eighties)
+  (load-theme jcs-active-theme t)
+  (defun toggle-dark-light-theme ()
+    "Toggle the current theme between light and dark."
+    (interactive)
+    (if (eq jcs-active-theme jcs-light-theme)
+        (progn (setq jcs-active-theme jcs-dark-theme)
+               (sml/apply-theme 'dark))
+      (progn (setq jcs-active-theme jcs-light-theme)
+             (sml/apply-theme 'light)))
+    (load-theme jcs-active-theme t)))
+
+;; Allow for seamless gpg interaction
+(use-package epa-file
+  :ensure f
+  :config (epa-file-enable))
 
 (use-package prog-mode
   :ensure f
