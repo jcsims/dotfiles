@@ -423,7 +423,7 @@ canceled tasks."
 (use-package saveplace
   :ensure f
   :when (version< "25" emacs-version)
-  :config (save-place-mode))
+  :config (save-place-mode t))
 
 ;;; Misc settings
 (setq inhibit-splash-screen t  ; Don't show the splash screen
@@ -446,6 +446,7 @@ canceled tasks."
 (use-package recentf
   :ensure f
   :config
+  (recentf-mode 1)
   (add-to-list 'recentf-exclude "^/\\(?:ssh\\|su\\|sudo\\)?:")
   (add-to-list 'recentf-exclude no-littering-var-directory)
   (add-to-list 'recentf-exclude no-littering-etc-directory))
@@ -463,11 +464,6 @@ canceled tasks."
 (use-package keychain-environment
   :if (eq system-type 'gnu/linux)
   :config (keychain-refresh-environment))
-
-;; Allow for seamless gpg interaction
-(use-package epa-file
-  :ensure f
-  :config (epa-file-enable))
 
 ;; Used for async package updating in paradox
 (use-package async)
@@ -907,6 +903,10 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   :custom (xref-search-program 'ripgrep))
 
 (use-package nix-mode)
+(use-package nixpkgs-fmt
+  :after nix-mode
+  :bind (:map nix-mode-map
+              ("C-c C-f" . nixpkgs-fmt-buffer)))
 
 (use-package sql-indent
   :hook (sql-mode . sqlind-minor-mode))
