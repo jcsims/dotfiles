@@ -155,7 +155,7 @@ If region is active, apply to active region instead."
   "Return a random lowercase character, from a-z."
   (format "%c" (+ 97 (random 26))))
 
-(defvar jcs/tab-sensitive-modes '(makefile-bsdmake-mode))
+(defvar jcs/tab-sensitive-modes '(makefile-bsdmake-mode go-mode))
 (defvar jcs/indent-sensitive-modes '(conf-mode
 				     coffee-mode
 				     haml-mode
