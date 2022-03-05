@@ -9,8 +9,8 @@
   format."
   (interactive "P")
   (let ((format (cond
-                 ((not prefix) "%a %d %b %Y")
-                 ((equal prefix '(4)) "%Y-%m-%d"))))
+		 ((not prefix) "%a %d %b %Y")
+		 ((equal prefix '(4)) "%Y-%m-%d"))))
     (insert (format-time-string format))))
 
 (global-set-key (kbd "C-c d") 'insert-date)
@@ -58,8 +58,8 @@ If region is active, apply to active region instead."
       (comment-or-uncomment-region
        (region-beginning) (region-end))
     (let ((range
-           (list (line-beginning-position)
-                 (goto-char (line-end-position n)))))
+	   (list (line-beginning-position)
+		 (goto-char (line-end-position n)))))
       (comment-or-uncomment-region
        (apply #'min range)
        (apply #'max range)))
@@ -77,19 +77,19 @@ If region is active, apply to active region instead."
     (eshell-send-input)))
 
 (add-hook 'eshell-mode-hook
-          '(lambda ()
-             (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
+	  '(lambda ()
+	     (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
 
 (defun dired-do-ispell (&optional arg)
   "Check all marked files ARG with ispell. Borrowed from the Emacswiki."
   (interactive "P")
   (dolist (file (dired-get-marked-files
-                 nil arg
-                 #'(lambda (f)
-                     (not (file-directory-p f)))))
+		 nil arg
+		 #'(lambda (f)
+		     (not (file-directory-p f)))))
     (save-window-excursion
       (with-current-buffer (find-file file)
-        (ispell-buffer)))
+	(ispell-buffer)))
     (message nil)))
 
 ;; Some functions carried over from the emacs starter kit
@@ -116,16 +116,16 @@ If region is active, apply to active region instead."
   "Ensure that commits on an issue- branch have the issue name in the commit as well."
   (let ((prefix (magit-get-current-branch)))
     (if (string-prefix-p "issue-" prefix)
-        (progn
-          (goto-char (point-min))
-          (if (not (search-forward prefix (line-end-position) t))
-              (progn
-                (goto-char (point-min))
-                (insert prefix " - ")
-                (insert "\n")
-                (goto-char (point-min))
-                (move-end-of-line nil))
-            (goto-char (point-min)))))))
+	(progn
+	  (goto-char (point-min))
+	  (if (not (search-forward prefix (line-end-position) t))
+	      (progn
+		(goto-char (point-min))
+		(insert prefix " - ")
+		(insert "\n")
+		(goto-char (point-min))
+		(move-end-of-line nil))
+	    (goto-char (point-min)))))))
 
 (add-hook 'git-commit-mode-hook 'jcs/magit-commit-template)
 
@@ -135,8 +135,8 @@ If region is active, apply to active region instead."
   (if (not (use-region-p))
       (message "`urldecode` only works with an active region!")
     (let ((unhexed (url-unhex-string
-                    (buffer-substring-no-properties
-                     (region-beginning) (region-end)))))
+		    (buffer-substring-no-properties
+		     (region-beginning) (region-end)))))
       (kill-new unhexed)
       (message "%s" unhexed))))
 
@@ -146,8 +146,8 @@ If region is active, apply to active region instead."
   (if (not (use-region-p))
       (message "`urlencode` only works with an active region!")
     (let ((hexed (url-hexify-string
-                  (buffer-substring-no-properties
-                   (region-beginning) (region-end)))))
+		  (buffer-substring-no-properties
+		   (region-beginning) (region-end)))))
       (kill-new hexed)
       (message "%s" hexed))))
 
@@ -157,11 +157,11 @@ If region is active, apply to active region instead."
 
 (defvar jcs/tab-sensitive-modes '(makefile-bsdmake-mode))
 (defvar jcs/indent-sensitive-modes '(conf-mode
-                                     coffee-mode
-                                     haml-mode
-                                     python-mode
-                                     slim-mode
-                                     yaml-mode))
+				     coffee-mode
+				     haml-mode
+				     python-mode
+				     slim-mode
+				     yaml-mode))
 
 ;; Slightly  modified from crux's version
 (defun cleanup-buffer ()
@@ -181,18 +181,18 @@ If region is active, apply to active region instead."
   (package-refresh-contents)
   (jcs--display-package-report
    (let* ((arch-pkgs (jcs--archive-packages))
-          (counts (seq-sort-by #'cdr #'> (jcs--archive-counts arch-pkgs)))
-          (by-arch (seq-group-by #'car arch-pkgs)))
+	  (counts (seq-sort-by #'cdr #'> (jcs--archive-counts arch-pkgs)))
+	  (by-arch (seq-group-by #'car arch-pkgs)))
      (concat
       (format "Total packages: %s\n\n" (apply #'+ (mapcar #'cdr counts)))
       (mapconcat
        (lambda (archive)
-         (concat "• "
-                 (format ":%s (%s)" (car archive) (cdr archive))
-                 ": "
-                 (mapconcat (lambda (ap-pair) (cdr ap-pair))
-                            (alist-get (car archive) by-arch)
-                            ", ")))
+	 (concat "• "
+		 (format ":%s (%s)" (car archive) (cdr archive))
+		 ": "
+		 (mapconcat (lambda (ap-pair) (cdr ap-pair))
+			    (alist-get (car archive) by-arch)
+			    ", ")))
        counts
        "\n\n)")))))
 
@@ -201,18 +201,18 @@ If region is active, apply to active region instead."
   (let ((buffer-name "*package-report*"))
     (with-help-window buffer-name
       (with-current-buffer buffer-name
-        (visual-line-mode 1)
-        (erase-buffer)
-        (insert output)
-        (goto-char (point-min))))))
+	(visual-line-mode 1)
+	(erase-buffer)
+	(insert output)
+	(goto-char (point-min))))))
 
 (defun jcs--archive-packages ()
   "Return a list of (archive . package) cons cells."
   (seq-reduce
    (lambda (res package)
      (let ((archive (package-desc-archive
-                     (cadr (assq package package-archive-contents))))
-           (pkg (symbol-name package)))
+		     (cadr (assq package package-archive-contents))))
+	   (pkg (symbol-name package)))
        (push (cons archive pkg) res)))
    (mapcar #'car package-alist)
    nil))
@@ -224,8 +224,8 @@ packages installed from each archive."
   (seq-reduce
    (lambda (counts key)
      (cons (cons key (+ 1 (or (cdr (assoc key counts))
-                              0)))
-           (assoc-delete-all key counts)))
+			      0)))
+	   (assoc-delete-all key counts)))
    (mapcar #'car arch-pkgs)
    nil))
 
@@ -237,10 +237,10 @@ With prefix argument BACKWARD, find the previous file."
   (interactive "P")
   (when buffer-file-name
     (let* ((file (expand-file-name buffer-file-name))
-           (files (cl-remove-if (lambda (file) (cl-first (file-attributes file)))
-                                (sort (directory-files (file-name-directory file) t nil t) 'string<)))
-           (pos (mod (+ (cl-position file files :test 'equal) (if backward -1 1))
-                     (length files))))
+	   (files (cl-remove-if (lambda (file) (cl-first (file-attributes file)))
+				(sort (directory-files (file-name-directory file) t nil t) 'string<)))
+	   (pos (mod (+ (cl-position file files :test 'equal) (if backward -1 1))
+		     (length files))))
       (find-file (nth pos files)))))
 
 (provide 'init-funcs)
