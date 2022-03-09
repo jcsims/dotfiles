@@ -19,9 +19,9 @@
 (require 'package)
 (setq package-archives
       '(("gnu" . "https://elpa.gnu.org/packages/")
-        ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-        ("melpa" . "https://melpa.org/packages/")
-        ("org" . "https://orgmode.org/elpa/")))
+	("nongnu" . "https://elpa.nongnu.org/nongnu/")
+	("melpa" . "https://melpa.org/packages/")
+	("org" . "https://orgmode.org/elpa/")))
 (package-initialize)
 
 ;; Setup use-package
@@ -56,7 +56,7 @@
   :config
   (require 'files)
   (setq auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
+	`((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
 (use-package auth-source
   :ensure f
@@ -99,7 +99,7 @@
     "Raise Emacs and select the provided frame."
     (with-selected-frame frame
       (when (display-graphic-p)
-        (ns-raise-emacs))))
+	(ns-raise-emacs))))
 
   (add-hook 'after-make-frame-functions 'ns-raise-emacs-with-frame))
 
@@ -137,17 +137,17 @@
 (use-package color-theme-sanityinc-tomorrow
   :config
   (setq jcs-active-theme 'sanityinc-tomorrow-eighties
-        jcs-light-theme 'sanityinc-tomorrow-day
-        jcs-dark-theme 'sanityinc-tomorrow-eighties)
+	jcs-light-theme 'sanityinc-tomorrow-day
+	jcs-dark-theme 'sanityinc-tomorrow-eighties)
   (load-theme jcs-active-theme t)
   (defun toggle-dark-light-theme ()
     "Toggle the current theme between light and dark."
     (interactive)
     (if (eq jcs-active-theme jcs-light-theme)
-        (progn (setq jcs-active-theme jcs-dark-theme)
-               (sml/apply-theme 'dark))
+	(progn (setq jcs-active-theme jcs-dark-theme)
+	       (sml/apply-theme 'dark))
       (progn (setq jcs-active-theme jcs-light-theme)
-             (sml/apply-theme 'light)))
+	     (sml/apply-theme 'light)))
     (load-theme jcs-active-theme t)))
 
 ;; Allow for seamless gpg interaction
@@ -176,31 +176,31 @@
   (org-priority-default ?C)
   (org-priority-lowest ?D)
   (org-tag-alist (quote (("@alex" . ?a)
-                         ("@stacey" . ?s)
-                         ("@uma" . ?u)
-                         ("@ed" . ?e)
-                         ("@tega" . ?t)
-                         (:newline)
-                         ("important" . ?i)
-                         ("urgent" . ?r)
-                         ("to_delegate" . ?d))))
+			 ("@stacey" . ?s)
+			 ("@uma" . ?u)
+			 ("@ed" . ?e)
+			 ("@tega" . ?t)
+			 (:newline)
+			 ("important" . ?i)
+			 ("urgent" . ?r)
+			 ("to_delegate" . ?d))))
 
   :config
   (setq org-hide-leading-stars t
-        org-hide-emphasis-markers t ;; Hide things like `*` for bold, etc.
-        org-directory org-dir
-        org-log-done 'time
-        org-log-into-drawer t
-        org-startup-indented t
-        org-startup-folded t
-        org-src-fontify-natively t
-        org-use-fast-todo-selection t
-        org-outline-path-complete-in-steps nil
-        ;; Don't ask every time before evaluating an org source block
-        org-confirm-babel-evaluate nil)
+	org-hide-emphasis-markers t ;; Hide things like `*` for bold, etc.
+	org-directory org-dir
+	org-log-done 'time
+	org-log-into-drawer t
+	org-startup-indented t
+	org-startup-folded t
+	org-src-fontify-natively t
+	org-use-fast-todo-selection t
+	org-outline-path-complete-in-steps nil
+	;; Don't ask every time before evaluating an org source block
+	org-confirm-babel-evaluate nil)
   (setq org-todo-keywords
-        (quote ((sequence "TODO(t)" "DOING(o)" "|" "DONE(d)")
-                (sequence "DELEGATED(e@/!)" "WAITING(w@/!)" "BLOCKED(b@/!)" "HAMMOCK(h@/!)" "|" "CANCELLED(c@/!)"))))
+	(quote ((sequence "TODO(t)" "DOING(o)" "|" "DONE(d)")
+		(sequence "DELEGATED(e@/!)" "WAITING(w@/!)" "BLOCKED(b@/!)" "HAMMOCK(h@/!)" "|" "CANCELLED(c@/!)"))))
 
   ;; These tend to modify files, so save after doing it
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
@@ -209,7 +209,7 @@
   (advice-add 'org-agenda-todo :after 'org-save-all-org-buffers)
 
   :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)))
+	 ("C-c a" . org-agenda)))
 
 (use-package org-tempo :ensure org)
 
@@ -220,15 +220,15 @@
   :init (setq org-roam-v2-ack t)
   :custom (org-roam-directory jcs/org-roam-dir)
   :bind (("C-c o l" . org-roam-buffer-toggle)
-         ("C-c o f" . org-roam-node-find)
-         ("C-c o g" . org-roam-graph)
-         ("C-c o i" . org-roam-node-insert)
-         ("C-c o c" . org-roam-capture)
-         ("C-c o r" . org-roam-refile)
-         ;; Dailies
-         ("C-c o j" . org-roam-dailies-capture-today))
+	 ("C-c o f" . org-roam-node-find)
+	 ("C-c o g" . org-roam-graph)
+	 ("C-c o i" . org-roam-node-insert)
+	 ("C-c o c" . org-roam-capture)
+	 ("C-c o r" . org-roam-refile)
+	 ;; Dailies
+	 ("C-c o j" . org-roam-dailies-capture-today))
   :hook ((find-file . vulpea-project-update-tag)
-         (before-save . vulpea-project-update-tag))
+	 (before-save . vulpea-project-update-tag))
   :config
   (org-roam-db-autosync-mode)
   (advice-add 'org-roam-refile :after 'org-save-all-org-buffers)
@@ -246,11 +246,11 @@ TODO entries marked as done are ignored, meaning this function
 returns nil if current buffer contains only completed or
 canceled tasks."
     (org-element-map
-        (org-element-parse-buffer 'headline)
-        'headline
+	(org-element-parse-buffer 'headline)
+	'headline
       (lambda (headline)
-        (eq (org-element-property :todo-type headline)
-            'todo))
+	(eq (org-element-property :todo-type headline)
+	    'todo))
       nil
       'first-match))
 
@@ -260,29 +260,29 @@ canceled tasks."
   (defun vulpea-project-update-tag ()
     "Update PROJECT tag in the current buffer."
     (when (and (not (active-minibuffer-window))
-               (org-roam-buffer-p))
+	       (org-roam-buffer-p))
       (save-excursion
-        (goto-char (point-min))
-        (let* ((tags (vulpea-buffer-tags-get))
-               (original-tags tags))
-          (if (vulpea-project-p)
-              (setq tags (cons "project" tags))
-            (setq tags (remove "project" tags)))
+	(goto-char (point-min))
+	(let* ((tags (vulpea-buffer-tags-get))
+	       (original-tags tags))
+	  (if (vulpea-project-p)
+	      (setq tags (cons "project" tags))
+	    (setq tags (remove "project" tags)))
 
-          ;; Remove duplicates
-          (setq tags (seq-uniq tags))
+	  ;; Remove duplicates
+	  (setq tags (seq-uniq tags))
 
-          ;; Update tags in the buffer if they've changed
-          (when (or (seq-difference tags original-tags)
-                    (seq-difference original-tags tags))
-            (apply #'vulpea-buffer-tags-set tags))))))
+	  ;; Update tags in the buffer if they've changed
+	  (when (or (seq-difference tags original-tags)
+		    (seq-difference original-tags tags))
+	    (apply #'vulpea-buffer-tags-set tags))))))
 
   (defun org-roam-buffer-p ()
     "Return non-nil of the currently visited buffer is an org-roam buffer."
     (and buffer-file-name
-         (string-prefix-p
-          (expand-file-name (file-name-as-directory org-roam-directory))
-          (file-name-as-directory buffer-file-name)))))
+	 (string-prefix-p
+	  (expand-file-name (file-name-as-directory org-roam-directory))
+	  (file-name-as-directory buffer-file-name)))))
 
 (use-package restclient)
 (use-package ob-restclient)
@@ -298,12 +298,12 @@ canceled tasks."
   :ensure org
   :config
   (org-babel-do-load-languages 'org-babel-load-languages
-                               '((clojure . t)
-                                 (shell . t)
-                                 (sql . t)
-                                 (emacs-lisp . t)
-                                 (elasticsearch . t)
-                                 (restclient . t))))
+			       '((clojure . t)
+				 (shell . t)
+				 (sql . t)
+				 (emacs-lisp . t)
+				 (elasticsearch . t)
+				 (restclient . t))))
 
 (use-package org-agenda
   :ensure org
@@ -313,16 +313,16 @@ canceled tasks."
   ;; this file.
   ;; Use the current window to open the agenda
   (setq org-agenda-window-setup 'current-window
-        org-agenda-block-separator nil
-        org-agenda-tags-column -80
-        org-agenda-show-future-repeats nil)
+	org-agenda-block-separator nil
+	org-agenda-tags-column -80
+	org-agenda-show-future-repeats nil)
 
   ;; Stolen from https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
   (setq org-agenda-prefix-format
-        '((agenda . " %i %(vulpea-agenda-category 12)%?-12t% s")
-          (todo . " %i %(vulpea-agenda-category 12) ")
-          (tags . " %i %(vulpea-agenda-category 12) ")
-          (search . " %i %(vulpea-agenda-category 12) ")))
+	'((agenda . " %i %(vulpea-agenda-category 12)%?-12t% s")
+	  (todo . " %i %(vulpea-agenda-category 12) ")
+	  (tags . " %i %(vulpea-agenda-category 12) ")
+	  (search . " %i %(vulpea-agenda-category 12) ")))
 
   (defun vulpea-agenda-category (&optional len)
     "Get category of item at point for agenda.
@@ -341,24 +341,24 @@ canceled tasks."
      Usage example:
 
        (setq org-agenda-prefix-format
-             '((agenda . \" %(vulpea-agenda-category) %?-12t %12s\")))
+	     '((agenda . \" %(vulpea-agenda-category) %?-12t %12s\")))
 
      Refer to `org-agenda-prefix-format' for more information."
     (let* ((file-name (when buffer-file-name
-                        (file-name-sans-extension
-                         (file-name-nondirectory buffer-file-name))))
-           (title (vulpea-buffer-prop-get "title"))
-           (category (org-get-category))
-           (result
-            (or (if (and
-                     title
-                     (string-equal category file-name))
-                    title
-                  category)
-                "")))
+			(file-name-sans-extension
+			 (file-name-nondirectory buffer-file-name))))
+	   (title (vulpea-buffer-prop-get "title"))
+	   (category (org-get-category))
+	   (result
+	    (or (if (and
+		     title
+		     (string-equal category file-name))
+		    title
+		  category)
+		"")))
       (if (numberp len)
-          (s-truncate len (s-pad-right len " " result))
-        result)))
+	  (s-truncate len (s-pad-right len " " result))
+	result)))
 
   (defun vulpea-project-files ()
     "Return a list of org-roam files containing the 'project' tag."
@@ -367,10 +367,10 @@ canceled tasks."
       #'car
       (org-roam-db-query
        [:select [nodes:file]
-                :from tags
-                :left-join nodes
-                :on (= tags:node-id nodes:id)
-                :where (like tag (quote "%\"project\"%"))]))))
+		:from tags
+		:left-join nodes
+		:on (= tags:node-id nodes:id)
+		:where (like tag (quote "%\"project\"%"))]))))
 
   (defun vulpea-agenda-files-update (&rest _)
     "Update the value of `org-agenda-files' based on 'project' tag."
@@ -380,38 +380,38 @@ canceled tasks."
   (advice-add 'org-todo-list :before #'vulpea-agenda-files-update)
 
   (setq org-agenda-custom-commands
-        '(("c" "Agenda and tasks"
-           ((agenda ""
-                    ((org-agenda-skip-function
-                      '(org-agenda-skip-if nil '(todo done)))))
-            (todo "BLOCKED"
-                  ((org-agenda-overriding-header "Blocked")
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-if nil '(scheduled)))))
-            (todo "DOING"
-                  ((org-agenda-overriding-header "In Progress")))
-            (todo "TODO"
-                  ((org-agenda-overriding-header "Todo")
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-if nil '(scheduled deadline)))))
-            (todo "WAITING"
-                  ((org-agenda-overriding-header "Waiting")
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-if nil '(scheduled)))))
-            (todo "DELEGATED"
-                  ((org-agenda-overriding-header "Delegated")
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-if nil '(scheduled)))))
-            (todo "HAMMOCK"
-                  ((org-agenda-overriding-header "Hammock")
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-if nil '(scheduled))))))))))
+	'(("c" "Agenda and tasks"
+	   ((agenda ""
+		    ((org-agenda-skip-function
+		      '(org-agenda-skip-if nil '(todo done)))))
+	    (todo "BLOCKED"
+		  ((org-agenda-overriding-header "Blocked")
+		   (org-agenda-skip-function
+		    '(org-agenda-skip-if nil '(scheduled)))))
+	    (todo "DOING"
+		  ((org-agenda-overriding-header "In Progress")))
+	    (todo "TODO"
+		  ((org-agenda-overriding-header "Todo")
+		   (org-agenda-skip-function
+		    '(org-agenda-skip-if nil '(scheduled deadline)))))
+	    (todo "WAITING"
+		  ((org-agenda-overriding-header "Waiting")
+		   (org-agenda-skip-function
+		    '(org-agenda-skip-if nil '(scheduled)))))
+	    (todo "DELEGATED"
+		  ((org-agenda-overriding-header "Delegated")
+		   (org-agenda-skip-function
+		    '(org-agenda-skip-if nil '(scheduled)))))
+	    (todo "HAMMOCK"
+		  ((org-agenda-overriding-header "Hammock")
+		   (org-agenda-skip-function
+		    '(org-agenda-skip-if nil '(scheduled))))))))))
 
 (use-package autorevert
   :ensure f
   :config
   (setq global-auto-revert-non-file-buffers t ; Refresh dired buffers
-        auto-revert-verbose nil)              ; but do it quietly
+	auto-revert-verbose nil)              ; but do it quietly
   ;; Auto-refresh buffers
   (global-auto-revert-mode))
 
@@ -441,7 +441,7 @@ canceled tasks."
 (use-package vc-hooks
   :ensure f
   :config (setq vc-follow-symlinks t ; even when they're in version control
-                ))
+		))
 
 (use-package recentf
   :ensure f
@@ -456,9 +456,9 @@ canceled tasks."
   :config
   (auto-save-visited-mode 1)
   (setq backup-directory-alist ; Save backups to a central location
-        `(("." . ,(no-littering-expand-var-file-name "backup/")))
-        auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
+	`(("." . ,(no-littering-expand-var-file-name "backup/")))
+	auto-save-file-name-transforms
+	`((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
 ;; Handles ssh-agent and gpg-agent configuration from `keychain`
 (use-package keychain-environment
@@ -472,8 +472,8 @@ canceled tasks."
   :commands (paradox-list-packages)
   :config
   (setq paradox-execute-asynchronously t
-        paradox-github-token (cadr (auth-source-user-and-password
-                                    "api.github.com" "jcsims^paradox")))
+	paradox-github-token (cadr (auth-source-user-and-password
+				    "api.github.com" "jcsims^paradox")))
   (paradox-enable))
 
 (use-package macrostep
@@ -493,15 +493,15 @@ canceled tasks."
   :demand
   :ensure f
   :bind (("C-c C-f" . goto-next-file)
-         ("C-c f" . goto-next-file)
-         ("C-c n". cleanup-buffer))
+	 ("C-c f" . goto-next-file)
+	 ("C-c n". cleanup-buffer))
   :load-path "lisp")
 
 (use-package whitespace
   :config
   (setq whitespace-line-column 80
-        fill-column 80
-        whitespace-style '(face indentation empty trailing lines-tail))
+	fill-column 80
+	whitespace-style '(face indentation empty trailing lines-tail))
   :hook
   (prog-mode . whitespace-mode)
   (text-mode . whitespace-mode))
@@ -509,23 +509,23 @@ canceled tasks."
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
+	 ("\\.md\\'" . markdown-mode)
+	 ("\\.markdown\\'" . markdown-mode))
   :config (setq markdown-fontify-code-blocks-natively t))
 
 (use-package minions
   :config
   (setq minions-direct '(flycheck-mode
-                         vlf-mode
-                         lsp-mode
-                         whitespace-cleanup-mode))
+			 vlf-mode
+			 lsp-mode
+			 whitespace-cleanup-mode))
   (minions-mode))
 
 (defun find-init-file ()
   "Open the init file for editing."
   (interactive)
   (find-file (string-trim
-              (shell-command-to-string "chezmoi source-path ~/.emacs.d/init.el"))))
+	      (shell-command-to-string "chezmoi source-path ~/.emacs.d/init.el"))))
 
 (use-package simple
   :ensure f
@@ -550,7 +550,7 @@ canceled tasks."
   (add-to-list 'tramp-default-proxies-alist '(nil "\\`root\\'" "/ssh:%h:"))
   (add-to-list 'tramp-default-proxies-alist '("localhost" nil nil))
   (add-to-list 'tramp-default-proxies-alist
-               (list (regexp-quote (system-name)) nil nil)))
+	       (list (regexp-quote (system-name)) nil nil)))
 
 ;; Ensure that when we go to a new line, it's indented properly
 (use-package electric
@@ -564,14 +564,14 @@ canceled tasks."
 (use-package server
   :if (display-graphic-p)
   :config (unless (server-running-p)
-            (server-start)))
+	    (server-start)))
 
 (use-package atomic-chrome
   :if (display-graphic-p)
   :config
   (setq atomic-chrome-url-major-mode-alist
-        '(("github\\.com" . gfm-mode)
-          ("github\\.threatbuild\\.com" . gfm-mode)))
+	'(("github\\.com" . gfm-mode)
+	  ("github\\.threatbuild\\.com" . gfm-mode)))
   (atomic-chrome-start-server))
 
 ;; Work-specific code - should be encrypted!
@@ -582,7 +582,7 @@ canceled tasks."
 ;; Flyspell mode
 (use-package flyspell
   :hook ((text-mode . flyspell-mode)
-         (prog-mode . flyspell-prog-mode)))
+	 (prog-mode . flyspell-prog-mode)))
 
 (use-package company
   :config
@@ -600,19 +600,19 @@ canceled tasks."
 
 (use-package symbol-overlay
   :bind (:map mode-specific-map
-              ("h h" . symbol-overlay-put)
-              ("h r" . symbol-overlay-remove-all)
-              ("h m" . symbol-overlay-mode)
-              ("h n" . symbol-overlay-switch-forward)
-              ("h p" . symbol-overlay-switch-backward)))
+	      ("h h" . symbol-overlay-put)
+	      ("h r" . symbol-overlay-remove-all)
+	      ("h m" . symbol-overlay-mode)
+	      ("h n" . symbol-overlay-switch-forward)
+	      ("h p" . symbol-overlay-switch-backward)))
 
 (use-package flycheck
   :config (global-flycheck-mode)
   :bind (:map flycheck-mode-map
-              ("M-n" . flycheck-next-error)
-              ("M-p" . flycheck-previous-error))
+	      ("M-n" . flycheck-next-error)
+	      ("M-p" . flycheck-previous-error))
   :custom (flycheck-global-modes '(not org-mode
-                                       cider-repl-mode)))
+				       cider-repl-mode)))
 
 ;; Borrowed from https://github.com/daviwil/dotfiles/commit/58eff6723515e438443b9feb87735624acd23c73
 (defun jcs/minibuffer-backward-kill (arg)
@@ -622,8 +622,8 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   (if minibuffer-completing-file-name
       ;; Borrowed from https://github.com/raxod502/selectrum/issues/498#issuecomment-803283608
       (if (string-match-p "/." (minibuffer-contents))
-          (zap-up-to-char (- arg) ?/)
-        (delete-minibuffer-contents))
+	  (zap-up-to-char (- arg) ?/)
+	(delete-minibuffer-contents))
     (backward-kill-word arg)))
 
 (use-package vertico
@@ -631,7 +631,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   :init (vertico-mode)
   :custom (vertico-cycle t)
   :bind (:map vertico-map
-              ("M-<backspace>" . jcs/minibuffer-backward-kill)))
+	      ("M-<backspace>" . jcs/minibuffer-backward-kill)))
 
 ;; (use-package icomplete
 ;;   :ensure f
@@ -645,13 +645,13 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package orderless
   :init
   (setq completion-styles '(orderless)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles . (partial-completion))))))
+	completion-category-defaults nil
+	completion-category-overrides '((file (styles . (partial-completion))))))
 
 (use-package consult
   :demand ;; never want to lazy-load this package
   :bind (("M-y" . consult-yank-from-kill-ring)
-         ([remap isearch-forward-regexp] . consult-line)))
+	 ([remap isearch-forward-regexp] . consult-line)))
 
 (use-package projectile
   :demand ;; never want to lazy-load this package
@@ -660,13 +660,13 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   (setq projectile-project-search-path '("~/code" "~/dev"))
   (projectile-mode +1)
   :bind (("C-c p" . projectile-command-map)
-         :map projectile-mode-map
-         ("C-c p" . projectile-command-map)
-         ;; This is handy on macOS
-         ("s-p" . projectile-command-map)
-         :map projectile-command-map
-         ;; I'm used to this binding, and ripgrep is faster
-         ("s s" . projectile-ripgrep)))
+	 :map projectile-mode-map
+	 ("C-c p" . projectile-command-map)
+	 ;; This is handy on macOS
+	 ("s-p" . projectile-command-map)
+	 :map projectile-command-map
+	 ;; I'm used to this binding, and ripgrep is faster
+	 ("s s" . projectile-ripgrep)))
 
 (use-package marginalia
   :init (marginalia-mode))
@@ -678,16 +678,16 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package magit
   :demand
   :bind (("C-c g"   . magit-status)
-         ("C-c M-g" . magit-dispatch))
+	 ("C-c M-g" . magit-dispatch))
   :custom
   (magit-branch-prefer-remote-upstream t)
   (magit-branch-adjust-remote-upstream-alist '(("upstream/master" . "issue-")))
   (magit-save-repository-buffers 'dontask)
   :config
   (magit-add-section-hook 'magit-status-sections-hook
-                          'magit-insert-modules
-                          'magit-insert-stashes
-                          'append))
+			  'magit-insert-modules
+			  'magit-insert-stashes
+			  'append))
 
 (use-package git-modes)
 
@@ -708,7 +708,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   :mode "Dockerfile")
 (use-package yaml-mode
   :mode (("\\.yml\\'" . yaml-mode)
-         ("\\.sls\\'" . yaml-mode)))
+	 ("\\.sls\\'" . yaml-mode)))
 
 (use-package which-key
   :config (which-key-mode))
@@ -759,12 +759,12 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
    (cider-repl-mode . cider-company-enable-fuzzy-completion)
    (cider-mode . cider-company-enable-fuzzy-completion))
   :bind (:map clojure-mode-map
-              ("C-c i" . cider-inspect-last-result)
-              ("M-s-." . cider-find-var))
+	      ("C-c i" . cider-inspect-last-result)
+	      ("M-s-." . cider-find-var))
   :custom
   ;; TODO: update these paths
   (cider-jdk-src-paths '("~/code/clojure-sources"
-                         "/usr/local/opt/java11/libexec/openjdk.jdk/Contents/Home/lib/src.zip"))
+			 "/usr/local/opt/java11/libexec/openjdk.jdk/Contents/Home/lib/src.zip"))
   ;; This should put it after e.g. lsp
   (cider-xref-fn-depth 90)
   (cider-save-file-on-load t)
@@ -779,16 +779,16 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   :config
   ;; kill REPL buffers for a project as well
   (add-to-list 'project-kill-buffer-conditions
-               '(derived-mode . cider-repl-mode)
-               t)
+	       '(derived-mode . cider-repl-mode)
+	       t)
   (setq cider-prompt-for-symbol nil ; Don't prompt for a symbol with `M-.`
-        cider-repl-display-help-banner nil
-        nrepl-log-messages t
-        cider-known-endpoints '(("Face" "localhost" "4242")
-                                ("Remote" "localhost" "8842")
-                                ("Threatbrain Server" "localhost" "4243")
-                                ("Integration Service" "localhost" "4244")
-                                ("GUNDAM" "localhost" "4245"))))
+	cider-repl-display-help-banner nil
+	nrepl-log-messages t
+	cider-known-endpoints '(("Face" "localhost" "4242")
+				("Remote" "localhost" "8842")
+				("Threatbrain Server" "localhost" "4243")
+				("Integration Service" "localhost" "4244")
+				("GUNDAM" "localhost" "4245"))))
 
 
 (use-package systemd :if (eq system-type 'gnu/linux))
@@ -798,7 +798,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   ;; browse-url decides not to use xdg-open if you don't use one of a
   ;; handful of desktop environments...
   :config (when (eq system-type 'gnu/linux)
-            (setq browse-url-browser-function 'browse-url-xdg-open)))
+	    (setq browse-url-browser-function 'browse-url-xdg-open)))
 
 (use-package wgrep)
 
@@ -810,7 +810,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 ;; LSP
 (use-package lsp-mode
   :hook ((rust-mode . lsp)
-         (clojure-mode . lsp))
+	 (clojure-mode . lsp))
   :config
   (setq read-process-output-max (* 1024 1024))
   (setq lsp-enable-indentation nil)
@@ -824,8 +824,8 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
   :after lsp-mode
   :commands lsp-ui-mode
   :bind (:map lsp-ui-mode-map
-              ("C-M-." . xref-find-references)
-              ([remap xref-find-references] . lsp-ui-peek-find-references))
+	      ("C-M-." . xref-find-references)
+	      ([remap xref-find-references] . lsp-ui-peek-find-references))
   :custom
   (lsp-ui-sideline-show-code-actions nil)
   (lsp-ui-sideline-show-diagnostics nil)
@@ -837,7 +837,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 
 (use-package rustic
   :hook (rustic-mode . (lambda ()
-                         (setq indent-tabs-mode nil)))
+			 (setq indent-tabs-mode nil)))
   :custom
   (rustic-lsp-format t))
 
@@ -854,7 +854,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 
 (use-package crux
   :bind (("C-x 4 t" . crux-transpose-windows)
-         ("C-a" . crux-move-beginning-of-line)))
+	 ("C-a" . crux-move-beginning-of-line)))
 
 (use-package help
   :ensure f
@@ -862,26 +862,26 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 
 (use-package helpful
   :bind (("C-h f" . helpful-callable)
-         ("C-h v" . helpful-variable)
-         ("C-h k" . helpful-key)
-         :map emacs-lisp-mode-map
-         ("C-c C-d" . helpful-at-point)))
+	 ("C-h v" . helpful-variable)
+	 ("C-h k" . helpful-key)
+	 :map emacs-lisp-mode-map
+	 ("C-c C-d" . helpful-at-point)))
 
 (use-package git-link
   :config
   (add-to-list 'git-link-remote-alist
-               '("github\\.threatbuild\\.com" git-link-github)))
+	       '("github\\.threatbuild\\.com" git-link-github)))
 
 (use-package buffer-move
   :bind (("C-S-<up>" . buf-move-up)
-         ("C-S-<down>" . buf-move-down)
-         ("C-S-<right>" . buf-move-right)
-         ("C-S-<left>" . buf-move-left)))
+	 ("C-S-<down>" . buf-move-down)
+	 ("C-S-<right>" . buf-move-right)
+	 ("C-S-<left>" . buf-move-left)))
 
 (use-package groovy-mode
   :hook (groovy-mode . (lambda ()
-                         (setq indent-tabs-mode nil)
-                         (setq tab-width 2)))
+			 (setq indent-tabs-mode nil)
+			 (setq tab-width 2)))
   :custom (groovy-indent-offset 2))
 
 (use-package hl-todo
@@ -906,7 +906,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package nixpkgs-fmt
   :after nix-mode
   :bind (:map nix-mode-map
-              ("C-c C-f" . nixpkgs-fmt-buffer)))
+	      ("C-c C-f" . nixpkgs-fmt-buffer)))
 
 (use-package sql-indent
   :hook (sql-mode . sqlind-minor-mode))
@@ -922,7 +922,7 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 
 ;; Local personalization
 (let ((file (expand-file-name (concat (user-real-login-name) ".el")
-                              user-emacs-directory)))
+			      user-emacs-directory)))
   (when (file-exists-p file)
     (load file)))
 
