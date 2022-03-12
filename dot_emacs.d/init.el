@@ -506,6 +506,9 @@ canceled tasks."
   (prog-mode . whitespace-mode)
   (text-mode . whitespace-mode))
 
+(use-package whitespace-cleanup-mode
+  :config (global-whitespace-cleanup-mode))
+
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
