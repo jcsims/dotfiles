@@ -113,19 +113,21 @@ If region is active, apply to active region instead."
 (use-package magit-git :ensure magit)
 (use-package git-commit :ensure magit)
 (defun jcs/magit-commit-template (&rest _)
-  "Ensure that commits on an issue- branch have the issue name in the commit as well."
+  "Ensure that commits on an issue- branch have the issue name in
+the commit as well."
   (let ((prefix (magit-get-current-branch)))
     (if (string-prefix-p "issue-" prefix)
-	(progn
-	  (goto-char (point-min))
-	  (if (not (search-forward prefix (line-end-position) t))
-	      (progn
-		(goto-char (point-min))
-		(insert prefix " - ")
-		(insert "\n")
-		(goto-char (point-min))
-		(move-end-of-line nil))
-	    (goto-char (point-min)))))))
+	(let* ((issue-number (string-replace "issue-" "" prefix))
+	       (issue-marker (concat "(#" issue-number ")")))
+	  (progn
+	    (goto-char (point-min))
+	    (if (not (search-forward issue-marker (line-end-position) t))
+		(progn
+		  (goto-char (point-min))
+		  (move-end-of-line nil)
+		  (insert " " issue-marker)
+		  (goto-char (point-min)))
+	      (goto-char (point-min))))))))
 
 (add-hook 'git-commit-mode-hook 'jcs/magit-commit-template)
 
