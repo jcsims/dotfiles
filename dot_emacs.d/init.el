@@ -501,7 +501,7 @@ canceled tasks."
   :config
   (setq whitespace-line-column 80
 	fill-column 80
-	whitespace-style '(face indentation empty trailing lines-tail))
+	whitespace-style '(face indentation empty trailing))
   :hook
   (prog-mode . whitespace-mode)
   (text-mode . whitespace-mode))
@@ -813,7 +813,8 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 ;; LSP
 (use-package lsp-mode
   :hook ((rust-mode . lsp)
-	 (clojure-mode . lsp))
+	 (clojure-mode . lsp)
+	 (go-mode . lsp))
   :config
   (setq read-process-output-max (* 1024 1024))
   (setq lsp-enable-indentation nil)

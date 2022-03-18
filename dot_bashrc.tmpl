@@ -87,9 +87,8 @@ export BASH_COMPLETION_COMPAT_DIR="/opt/homebrew/etc/bash_completion.d"
 
 #export JAVA_HOME=$(brew --prefix openjdk)
 
-# Add installed-from-source Postgres binary and manpage paths
-append_path /usr/local/pgsql/bin
-export MANPATH=/usr/local/pgsql/share/man:$MANPATH
+# Add local Go binary path
+append_path $HOME/go/bin
 
 alias stay-awake='caffeinate -di'
 
