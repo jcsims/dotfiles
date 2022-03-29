@@ -80,12 +80,16 @@ fi
 prepend_path /opt/homebrew/bin
 prepend_path /opt/homebrew/sbin
 
+export BASH_COMPLETION_COMPAT_DIR=$HOME/.nix-profile/share/bash-completion/completions
 
-export BASH_COMPLETION_COMPAT_DIR="/opt/homebrew/etc/bash_completion.d"
+[[ -r $HOME/.nix-profile/share/bash-completion/bash_completion ]] && \
+    source $HOME/.nix-profile/share/bash-completion/bash_completion
 
-[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+[ -f $HOME/.nix-profile/share/skim/completion.bash ] && \
+    source $HOME/.nix-profile/share/skim/completion.bash
+[ -f $HOME/.nix-profile/share/skim/key-bindings.bash ] && \
+    source $HOME/.nix-profile/share/skim/key-bindings.bash
 
-#export JAVA_HOME=$(brew --prefix openjdk)
 
 # Add local Go binary path
 append_path $HOME/go/bin
@@ -94,11 +98,6 @@ alias stay-awake='caffeinate -di'
 
 alias alert='terminal-notifier -activate "com.googlecode.iterm2" -message "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Base16 Shell
-BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1" ] && \
-    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-    eval "$("$BASE16_SHELL/profile_helper.sh")"
 {{ end }}
 
 # Set the theme for `bat`
