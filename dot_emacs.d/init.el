@@ -530,6 +530,11 @@ canceled tasks."
   (find-file (string-trim
 	      (shell-command-to-string "chezmoi source-path ~/.emacs.d/init.el"))))
 
+(defun find-home-nix ()
+  "Open home.nix for editing."
+  (interactive)
+  (find-file "~/.config/nixpkgs/home.nix"))
+
 (use-package simple
   :ensure f
   :after org
@@ -540,6 +545,7 @@ canceled tasks."
   :bind
   ("M-SPC" . cycle-spacing)
   ("C-c e e" . find-init-file)
+  ("C-c e h" . find-home-nix)
   :hook ((text-mode org-mode markdown-mode) . turn-on-auto-fill))
 
 (use-package text-mode
