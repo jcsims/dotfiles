@@ -226,6 +226,7 @@
 	 ("C-c o c" . org-roam-capture)
 	 ("C-c o r" . org-roam-refile)
 	 ;; Dailies
+	 ("C-c o d" . org-roam-dailies-goto-today)
 	 ("C-c o j" . org-roam-dailies-capture-today))
   :hook ((find-file . vulpea-project-update-tag)
 	 (before-save . vulpea-project-update-tag))
@@ -317,7 +318,12 @@ canceled tasks."
 	org-agenda-tags-column -80
 	org-agenda-show-future-repeats nil)
 
-  ;; Stolen from https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+  ;; Stolen from
+  ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+  ;; This ensures that the label prior to the TODO in the agenda is
+  ;; readable and sane. This is especially useful using org-roam,
+  ;; since the filenames are prefixed with a timestamp, making the
+  ;; usual pattern (the filename) useless.
   (setq org-agenda-prefix-format
 	'((agenda . " %i %(vulpea-agenda-category 12)%?-12t% s")
 	  (todo . " %i %(vulpea-agenda-category 12) ")
