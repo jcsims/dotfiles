@@ -227,6 +227,8 @@
 	 ("C-c o r" . org-roam-refile)
 	 ;; Dailies
 	 ("C-c o d" . org-roam-dailies-goto-today)
+	 ("C-c o p" . org-roam-dailies-goto-previous-note)
+	 ("C-c o n" . org-roam-dailies-goto-next-note)
 	 ("C-c o j" . org-roam-dailies-capture-today))
   :hook ((find-file . vulpea-project-update-tag)
 	 (before-save . vulpea-project-update-tag))
