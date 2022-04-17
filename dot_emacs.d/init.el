@@ -507,7 +507,7 @@ canceled tasks."
 
 (use-package whitespace
   :config
-  (setq-default fill-column 100)
+  (setq-default fill-column 80)
   (setq whitespace-style '(face empty trailing))
   :hook
   (prog-mode . whitespace-mode)
