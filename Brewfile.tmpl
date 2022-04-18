@@ -10,34 +10,66 @@ tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "homebrew/services"
 
-brew "pinentry-mac"
+brew "aspell"
+brew "bat"
+brew "chezmoi"
+# To build libgit
+brew "cmake"
+brew "coreutils"
+brew "curl"
+brew "fd"
+brew "gcc"
+brew "gnutls"
+brew "git"
+brew "gopls"
+brew "hexyl"
+brew "htop"
+brew "jq"
 # Mac App Store command-line util
 brew "mas"
-# # For the system Java wrappers to find this JDK, symlink it with
-# #  sudo ln -sfn /opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
-# brew "openjdk@11"
+# For the system Java wrappers to find this JDK, symlink it with
+#  sudo ln -sfn /opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
+brew "openjdk@11"
+brew "pass"
+brew "pinentry-mac"
+brew "restic"
+brew "ripgrep"
+brew "rust-analyzer"
+brew "rustup-init"
+brew "shellcheck"
+brew "sk"
 brew "starship"
+brew "tectonic"
+brew "terminal-notifier"
+brew "tmux"
+brew "tokei"
+brew "tree"
+brew "vim"
 
 brew "borkdude/brew/babashka"
+brew "clojure/tools/clojure"
 brew "clojure-lsp/brew/clojure-lsp-native"
 brew "d12frosted/emacs-plus/emacs-plus@28"
-brew "elastic/tap/elasticsearch-full", restart_service: :changed
+brew "elastic/tap/elasticsearch-full"
+
+## Services
+brew "postgresql@13", link: true
+brew "redis"
+
+# Mac App Store command-line util
+brew "mas"
 
 cask "1password"
 cask "aerial"
 cask "alfred"
 cask "arq"
-cask "anybar"
 cask "calibre"
 cask "cleanmymac"
 cask "daisydisk"
 cask "dash"
 cask "discord"
 cask "docker"
-cask "dropbox"
 cask "font-hack-nerd-font"
-cask "gpg-suite" # gpg-tools
-cask "intellij-idea"
 cask "istat-menus"
 cask "iterm2"
 cask "keybase"
@@ -50,21 +82,11 @@ cask "openaudible"
 cask "plexamp"
 cask "rectangle"
 cask "ringcentral"
-cask "spotify"
 cask "transmit"
 cask "viscosity"
 cask "webex"
 cask "wireshark"
 cask "zotero"
-
-{{ if (eq .chezmoi.hostname "groot") }}
-# gaming
-cask "battle-net"
-cask "gog-galaxy"
-cask "minecraft"
-cask "nvidia-geforce-now"
-cask "steam"
-{{ end }}
 
 # mac app store
 mas "Things 3", id: 904280696
