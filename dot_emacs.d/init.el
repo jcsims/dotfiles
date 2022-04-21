@@ -440,6 +440,11 @@ canceled tasks."
 		   (org-agenda-skip-function
 		    '(org-agenda-skip-if nil '(scheduled))))))))))
 
+(use-package org-alert
+  :config
+  (setq alert-default-style 'notifier)
+  (org-alert-enable))
+
 (use-package autorevert
   :ensure f
   :config
