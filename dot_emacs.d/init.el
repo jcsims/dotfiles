@@ -197,7 +197,9 @@
 	org-use-fast-todo-selection t
 	org-outline-path-complete-in-steps nil
 	;; Don't ask every time before evaluating an org source block
-	org-confirm-babel-evaluate nil)
+	org-confirm-babel-evaluate nil
+	;; Try to keep image widths in emacs to a sane value (measured in pixels)
+	org-image-actual-width 1000)
   (setq org-todo-keywords
 	(quote ((sequence "TODO(t)" "DOING(o)" "|" "DONE(d)")
 		(sequence "DELEGATED(e@/!)" "WAITING(w@/!)" "BLOCKED(b@/!)" "HAMMOCK(h@/!)" "|" "CANCELLED(c@/!)"))))
@@ -207,6 +209,29 @@
   (advice-add 'org-archive-subtree-default :after 'org-save-all-org-buffers)
   (advice-add 'org-agenda-archive-default-with-confirmation :after 'org-save-all-org-buffers)
   (advice-add 'org-agenda-todo :after 'org-save-all-org-buffers)
+
+  ;; Modified from https://stackoverflow.com/a/31868530
+  (defun jcs/org-screenshot ()
+    "Take a screenshot into a time stamped unique-named file in the
+same directory as the org-buffer and insert a link to this file."
+    (interactive)
+    (org-display-inline-images)
+    (setq filename
+          (concat
+           (make-temp-name
+            (concat (file-name-nondirectory (buffer-file-name))
+                    "_imgs/"
+                    (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+    (unless (file-exists-p (file-name-directory filename))
+      (make-directory (file-name-directory filename)))
+					; take screenshot
+    (if (eq system-type 'darwin)
+	(call-process "screencapture" nil nil nil "-i" filename))
+    (if (eq system-type 'gnu/linux)
+	(call-process "import" nil nil nil filename))
+					; insert into file if correctly taken
+    (if (file-exists-p filename)
+	(insert (concat "[[file:" filename "]]"))))
 
   :bind (("C-c l" . org-store-link)
 	 ("C-c a" . org-agenda)))
