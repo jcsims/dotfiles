@@ -441,6 +441,7 @@ canceled tasks."
 		    '(org-agenda-skip-if nil '(scheduled))))))))))
 
 (use-package org-alert
+  :disabled
   :config
   (setq alert-default-style 'notifier)
   (org-alert-enable))
