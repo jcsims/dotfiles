@@ -215,7 +215,6 @@
     "Take a screenshot into a time stamped unique-named file in the
 same directory as the org-buffer and insert a link to this file."
     (interactive)
-    (org-display-inline-images)
     (setq filename
           (concat
            (make-temp-name
@@ -231,7 +230,8 @@ same directory as the org-buffer and insert a link to this file."
 	(call-process "import" nil nil nil filename))
 					; insert into file if correctly taken
     (if (file-exists-p filename)
-	(insert (concat "[[file:" filename "]]"))))
+	(insert (concat "[[file:" filename "]]")))
+    (org-display-inline-images))
 
   :bind (("C-c l" . org-store-link)
 	 ("C-c a" . org-agenda)))
