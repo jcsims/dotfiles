@@ -966,7 +966,9 @@ Passes ARG onto `zap-to-char` or `backward-kill-word` if used."
 (use-package winner
   :ensure f)
 
-(use-package go-mode)
+(use-package go-mode
+  :hook (go-mode . (lambda ()
+		     (setq tab-width 2))))
 
 ;; Local personalization
 (let ((file (expand-file-name (concat (user-real-login-name) ".el")
